@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface ProfileService {
 
+    void addToWatchlist(Long watchableId, Long profileId);
+
     List<Profile> findAll();
 
     Profile getProfile(Long id);
