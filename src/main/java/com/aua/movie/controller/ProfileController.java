@@ -3,6 +3,7 @@ package com.aua.movie.controller;
 import com.aua.movie.model.Profile;
 import com.aua.movie.service.ProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,27 +23,32 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @GetMapping
-    public List<Profile> getAllProfiles() {
-        return profileService.findAll();
+    public ResponseEntity<List<Profile>> getAllProfiles() {
+        List<Profile> body = profileService.findAll();
+        return ResponseEntity.ok(body);
     }
 
     @GetMapping("/{id}")
-    public Profile getProfile(@PathVariable Long id) {
-        return profileService.getProfile(id);
+    public ResponseEntity<Profile> getProfile(@PathVariable Long id) {
+        Profile body = profileService.getProfile(id);
+        return ResponseEntity.ok(body);
     }
 
     @PostMapping
-    public Profile registerProfile(@RequestBody Profile profile) {
-        return profileService.registerProfile(profile);
+    public ResponseEntity<Profile> registerProfile(@RequestBody Profile profile) {
+        Profile body = profileService.registerProfile(profile);
+        return ResponseEntity.ok(body);
     }
 
     @PutMapping
-    public void updateProfile(@RequestBody Profile profile) {
+    public ResponseEntity<Void> updateProfile(@RequestBody Profile profile) {
         profileService.updateProfile(profile);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public void removeProfile(@PathVariable Long id) {
+    public ResponseEntity<Void> removeProfile(@PathVariable Long id) {
         profileService.deleteProfile(id);
+        return ResponseEntity.ok().build();
     }
 }
