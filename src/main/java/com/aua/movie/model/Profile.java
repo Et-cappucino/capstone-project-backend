@@ -40,8 +40,15 @@ public class Profile {
 
     @ManyToMany
     @JoinTable(
-            name = "profile_watchable",
+            name = "watchlist",
             joinColumns = @JoinColumn(name = "profile_id"),
             inverseJoinColumns = @JoinColumn(name = "watchable_id"))
     private List<Watchable> watchlist;
+
+    @ManyToMany
+    @JoinTable(
+            name = "favorites",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "watchable_id"))
+    private List<Watchable> favorites;
 }
