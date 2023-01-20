@@ -1,15 +1,22 @@
 package com.aua.movie.model;
 
+import com.aua.movie.model.enums.Genre;
 import com.aua.movie.model.enums.WatchableType;
 import lombok.Data;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -23,6 +30,7 @@ public class Watchable {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private WatchableType type;
 
@@ -34,4 +42,10 @@ public class Watchable {
 
     @Column(name = "duration", nullable = false)
     private int duration;
+
+    @ElementCollection(targetClass = Genre.class)
+    @JoinTable(name = "Genres", joinColumns = @JoinColumn(name = "watchable_id"))
+    @Column(name = "genre", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private List<Genre> genres;
 }
