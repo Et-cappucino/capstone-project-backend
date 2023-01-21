@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.List;
@@ -48,4 +49,11 @@ public class Watchable {
     @Column(name = "genre", nullable = false)
     @Enumerated(EnumType.STRING)
     private List<Genre> genres;
+
+    @ManyToMany
+    @JoinTable(
+            name = "cast",
+            joinColumns = @JoinColumn(name = "watchable_id"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id"))
+    private List<Actor> cast;
 }
