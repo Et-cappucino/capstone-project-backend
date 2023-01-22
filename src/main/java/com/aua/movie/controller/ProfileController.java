@@ -1,9 +1,10 @@
 package com.aua.movie.controller;
 
-import com.aua.movie.model.Profile;
+import com.aua.movie.dto.ProfileDto;
 import com.aua.movie.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/profiles")
@@ -23,26 +26,26 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @GetMapping
-    public ResponseEntity<List<Profile>> getAllProfiles() {
-        List<Profile> body = profileService.findAll();
+    public ResponseEntity<List<ProfileDto>> getAllProfiles() {
+        List<ProfileDto> body = profileService.findAll();
         return ResponseEntity.ok(body);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Profile> getProfile(@PathVariable Long id) {
-        Profile body = profileService.getProfile(id);
+    public ResponseEntity<ProfileDto> getProfile(@PathVariable Long id) {
+        ProfileDto body = profileService.getProfile(id);
         return ResponseEntity.ok(body);
     }
 
     @PostMapping
-    public ResponseEntity<Profile> registerProfile(@RequestBody Profile profile) {
-        Profile body = profileService.registerProfile(profile);
+    public ResponseEntity<ProfileDto> registerProfile(@RequestBody @Valid ProfileDto profileDto) {
+        ProfileDto body = profileService.registerProfile(profileDto);
         return ResponseEntity.ok(body);
     }
 
     @PutMapping
-    public ResponseEntity<Void> updateProfile(@RequestBody Profile profile) {
-        profileService.updateProfile(profile);
+    public ResponseEntity<Void> updateProfile(@RequestBody @Valid ProfileDto profileDto) {
+        profileService.updateProfile(profileDto);
         return ResponseEntity.ok().build();
     }
 
