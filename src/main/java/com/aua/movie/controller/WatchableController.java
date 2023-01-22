@@ -1,9 +1,10 @@
 package com.aua.movie.controller;
 
-import com.aua.movie.model.Watchable;
+import com.aua.movie.dto.WatchableDto;
 import com.aua.movie.service.WatchableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/watchables")
@@ -23,26 +26,26 @@ public class WatchableController {
     private final WatchableService watchableService;
 
     @GetMapping
-    public ResponseEntity<List<Watchable>> getAllWatchables() {
-        List<Watchable> body = watchableService.findAll();
+    public ResponseEntity<List<WatchableDto>> getAllWatchables() {
+        List<WatchableDto> body = watchableService.findAll();
         return ResponseEntity.ok(body);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Watchable> getWatchable(@PathVariable Long id) {
-        Watchable body = watchableService.getWatchable(id);
+    public ResponseEntity<WatchableDto> getWatchable(@PathVariable Long id) {
+        WatchableDto body = watchableService.getWatchable(id);
         return ResponseEntity.ok(body);
     }
 
     @PostMapping
-    public ResponseEntity<Watchable> registerWatchable(@RequestBody Watchable watchable) {
-        Watchable body = watchableService.registerWatchable(watchable);
+    public ResponseEntity<WatchableDto> registerWatchable(@RequestBody @Valid WatchableDto watchableDto) {
+        WatchableDto body = watchableService.registerWatchable(watchableDto);
         return ResponseEntity.ok(body);
     }
 
     @PutMapping
-    public ResponseEntity<Void> updateWatchable(@RequestBody Watchable watchable) {
-        watchableService.updateWatchable(watchable);
+    public ResponseEntity<Void> updateWatchable(@RequestBody @Valid WatchableDto watchableDto) {
+        watchableService.updateWatchable(watchableDto);
         return ResponseEntity.ok().build();
     }
 

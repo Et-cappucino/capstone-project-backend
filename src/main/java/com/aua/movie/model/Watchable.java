@@ -35,7 +35,7 @@ public class Watchable {
     @Column(name = "type", nullable = false)
     private WatchableType type;
 
-    @Column(name = "release_date", nullable = false)
+    @Column(name = "release_date")
     private LocalDate releaseDate;
 
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")

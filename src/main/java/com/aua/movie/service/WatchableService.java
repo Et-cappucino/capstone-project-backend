@@ -1,18 +1,18 @@
 package com.aua.movie.service;
 
-import com.aua.movie.model.Watchable;
+import com.aua.movie.dto.WatchableDto;
 
 import java.util.List;
 
 public interface WatchableService {
 
-    List<Watchable> findAll();
+    List<WatchableDto> findAll();
 
-    Watchable getWatchable(Long id);
+    WatchableDto getWatchable(Long id);
 
-    Watchable registerWatchable(Watchable watchable);
+    WatchableDto registerWatchable(WatchableDto watchableDto);
 
-    void updateWatchable(Watchable watchable);
+    void updateWatchable(WatchableDto watchableDto);
 
     void deleteWatchable(Long id);
 }
