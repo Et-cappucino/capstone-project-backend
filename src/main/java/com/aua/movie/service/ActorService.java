@@ -1,18 +1,18 @@
 package com.aua.movie.service;
 
-import com.aua.movie.model.Actor;
+import com.aua.movie.dto.ActorDto;
 
 import java.util.List;
 
 public interface ActorService {
 
-    List<Actor> findAll();
+    List<ActorDto> findAll();
 
-    Actor getActor(Long id);
+    ActorDto getActor(Long id);
 
-    Actor registerActor(Actor actor);
+    ActorDto registerActor(ActorDto actorDto);
 
-    void updateActor(Actor actor);
+    void updateActor(ActorDto actorDto);
 
     void deleteActor(Long id);
 }
