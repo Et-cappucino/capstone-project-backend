@@ -12,7 +12,7 @@ public interface ProfileService {
 
     ProfileDto registerProfile(ProfileDto profile);
 
-    void updateProfile(ProfileDto profile);
+    ProfileDto updateProfile(ProfileDto profile, Long id);
 
     void deleteProfile(Long id);
 }

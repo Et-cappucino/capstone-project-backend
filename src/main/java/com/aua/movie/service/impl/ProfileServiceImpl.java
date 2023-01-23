@@ -43,9 +43,21 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void updateProfile(ProfileDto profileDto) {
-        Profile profile = profileMapper.profileDtoToProfile(profileDto);
+    public ProfileDto updateProfile(ProfileDto profileDto, Long id) {
+        Profile profile = profileRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Profile updatedProfile = profileMapper.profileDtoToProfile(profileDto);
+
+        profile.setFirstName(updatedProfile.getFirstName());
+        profile.setLastName(updatedProfile.getLastName());
+        profile.setEmail(updatedProfile.getEmail());
+        profile.setPassword(updatedProfile.getPassword());
+        profile.setAdmin(updatedProfile.isAdmin());
+        profile.setWatchlist(updatedProfile.getWatchlist());
+        profile.setFavorites(updatedProfile.getFavorites());
+
         profileRepository.save(profile);
+        return profileMapper.profileToProfileDto(profile);
     }
 
     @Override

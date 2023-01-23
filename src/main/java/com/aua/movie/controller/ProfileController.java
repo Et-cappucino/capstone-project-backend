@@ -43,10 +43,10 @@ public class ProfileController {
         return ResponseEntity.ok(body);
     }
 
-    @PutMapping
-    public ResponseEntity<Void> updateProfile(@RequestBody @Valid ProfileDto profileDto) {
-        profileService.updateProfile(profileDto);
-        return ResponseEntity.ok().build();
+    @PutMapping("/{id}")
+    public ResponseEntity<ProfileDto> updateProfile(@RequestBody @Valid ProfileDto profileDto, @PathVariable Long id) {
+        ProfileDto body = profileService.updateProfile(profileDto, id);
+        return ResponseEntity.ok(body);
     }
 
     @DeleteMapping("/{id}")
