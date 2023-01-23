@@ -43,10 +43,10 @@ public class WatchableController {
         return ResponseEntity.ok(body);
     }
 
-    @PutMapping
-    public ResponseEntity<Void> updateWatchable(@RequestBody @Valid WatchableDto watchableDto) {
-        watchableService.updateWatchable(watchableDto);
-        return ResponseEntity.ok().build();
+    @PutMapping("/{id}")
+    public ResponseEntity<WatchableDto> updateWatchable(@RequestBody @Valid WatchableDto watchableDto, @PathVariable Long id) {
+        WatchableDto body = watchableService.updateWatchable(watchableDto, id);
+        return ResponseEntity.ok(body);
     }
 
     @DeleteMapping("/{id}")

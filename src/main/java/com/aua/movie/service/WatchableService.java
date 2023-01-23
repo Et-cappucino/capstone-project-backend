@@ -12,7 +12,7 @@ public interface WatchableService {
 
     WatchableDto registerWatchable(WatchableDto watchableDto);
 
-    void updateWatchable(WatchableDto watchableDto);
+    WatchableDto updateWatchable(WatchableDto watchableDto, Long id);
 
     void deleteWatchable(Long id);
 }

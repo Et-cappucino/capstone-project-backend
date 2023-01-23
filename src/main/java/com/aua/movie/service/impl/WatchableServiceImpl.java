@@ -43,9 +43,21 @@ public class WatchableServiceImpl implements WatchableService {
     }
 
     @Override
-    public void updateWatchable(WatchableDto watchableDto) {
-        Watchable watchable = watchableMapper.watchableDtoToWatchable(watchableDto);
+    public WatchableDto updateWatchable(WatchableDto watchableDto, Long id) {
+        Watchable watchable = watchableRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Watchable updatedWatchable = watchableMapper.watchableDtoToWatchable(watchableDto);
+
+        watchable.setName(updatedWatchable.getName());
+        watchable.setType(updatedWatchable.getType());
+        watchable.setDuration(updatedWatchable.getDuration());
+        watchable.setReleaseDate(updatedWatchable.getReleaseDate());
+        watchable.setDescription(updatedWatchable.getDescription());
+        watchable.setGenres(updatedWatchable.getGenres());
+        watchable.setCast(updatedWatchable.getCast());
+
         watchableRepository.save(watchable);
+        return watchableMapper.watchableToWatchableDto(watchable);
     }
 
     @Override
