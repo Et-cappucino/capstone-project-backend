@@ -12,7 +12,7 @@ public interface ActorService {
 
     ActorDto registerActor(ActorDto actorDto);
 
-    void updateActor(ActorDto actorDto);
+    ActorDto updateActor(ActorDto actorDto, Long id);
 
     void deleteActor(Long id);
 }

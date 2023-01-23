@@ -43,10 +43,10 @@ public class ActorController {
         return ResponseEntity.ok(body);
     }
 
-    @PutMapping
-    public ResponseEntity<Void> updateActor(@RequestBody @Valid ActorDto actorDto) {
-        actorService.updateActor(actorDto);
-        return ResponseEntity.ok().build();
+    @PutMapping("/{id}")
+    public ResponseEntity<ActorDto> updateActor(@RequestBody @Valid ActorDto actorDto, @PathVariable Long id) {
+        ActorDto body = actorService.updateActor(actorDto, id);
+        return ResponseEntity.ok(body);
     }
 
     @DeleteMapping("/{id}")
