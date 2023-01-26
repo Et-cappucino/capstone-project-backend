@@ -1,18 +1,18 @@
 package com.aua.movie.service;
 
-import com.aua.movie.model.Profile;
+import com.aua.movie.dto.ProfileDto;
 
 import java.util.List;
 
 public interface ProfileService {
 
-    List<Profile> findAll();
+    List<ProfileDto> findAll();
 
-    Profile getProfile(Long id);
+    ProfileDto getProfile(Long id);
 
-    Profile registerProfile(Profile profile);
+    ProfileDto registerProfile(ProfileDto profile);
 
-    void updateProfile(Profile profile);
+    ProfileDto updateProfile(ProfileDto profile, Long id);
 
     void deleteProfile(Long id);
 }

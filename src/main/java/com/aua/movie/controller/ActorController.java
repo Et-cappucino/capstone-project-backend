@@ -1,7 +1,7 @@
 package com.aua.movie.controller;
 
-import com.aua.movie.dto.ProfileDto;
-import com.aua.movie.service.ProfileService;
+import com.aua.movie.dto.ActorDto;
+import com.aua.movie.service.ActorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,38 +20,38 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/profiles")
-public class ProfileController {
+@RequestMapping("/api/actors")
+public class ActorController {
 
-    private final ProfileService profileService;
+    private final ActorService actorService;
 
     @GetMapping
-    public ResponseEntity<List<ProfileDto>> getAllProfiles() {
-        List<ProfileDto> body = profileService.findAll();
+    public ResponseEntity<List<ActorDto>> getAllActors() {
+        List<ActorDto> body = actorService.findAll();
         return ResponseEntity.ok(body);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfileDto> getProfile(@PathVariable Long id) {
-        ProfileDto body = profileService.getProfile(id);
+    public ResponseEntity<ActorDto> getActor(@PathVariable Long id) {
+        ActorDto body = actorService.getActor(id);
         return ResponseEntity.ok(body);
     }
 
     @PostMapping
-    public ResponseEntity<ProfileDto> registerProfile(@RequestBody @Valid ProfileDto profileDto) {
-        ProfileDto body = profileService.registerProfile(profileDto);
+    public ResponseEntity<ActorDto> registerActor(@RequestBody @Valid ActorDto actorDto) {
+        ActorDto body = actorService.registerActor(actorDto);
         return ResponseEntity.ok(body);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProfileDto> updateProfile(@RequestBody @Valid ProfileDto profileDto, @PathVariable Long id) {
-        ProfileDto body = profileService.updateProfile(profileDto, id);
+    public ResponseEntity<ActorDto> updateActor(@RequestBody @Valid ActorDto actorDto, @PathVariable Long id) {
+        ActorDto body = actorService.updateActor(actorDto, id);
         return ResponseEntity.ok(body);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeProfile(@PathVariable Long id) {
-        profileService.deleteProfile(id);
+    public ResponseEntity<Void> removeActor(@PathVariable Long id) {
+        actorService.deleteActor(id);
         return ResponseEntity.ok().build();
     }
 }
