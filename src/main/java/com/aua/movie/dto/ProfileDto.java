@@ -51,4 +51,8 @@ public class ProfileDto {
     @ApiModelProperty(value = "Favorite movies or series of the user")
     @Valid
     private List<WatchableDto> favorites;
+
+    @ApiModelProperty(value = "Comments of the profile")
+    @Valid
+    private List<CommentDto> comments;
 }

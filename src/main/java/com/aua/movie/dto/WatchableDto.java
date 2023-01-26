@@ -53,4 +53,8 @@ public class WatchableDto {
     @ApiModelProperty(value = "Cast of the watchable")
     @Valid
     private List<ActorDto> cast;
+
+    @ApiModelProperty(value = "Comments of the watchable")
+    @Valid
+    private List<CommentDto> comments;
 }
