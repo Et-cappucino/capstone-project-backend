@@ -4,6 +4,7 @@ import com.aua.movie.model.enums.Genre;
 import com.aua.movie.model.enums.WatchableType;
 import lombok.Data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.List;
@@ -56,4 +58,7 @@ public class Watchable {
             joinColumns = @JoinColumn(name = "watchable_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id"))
     private List<Actor> cast;
+
+    @OneToMany(mappedBy = "watchable", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 }
