@@ -41,6 +41,9 @@ public class WatchableDto {
     @NotBlank
     private String description;
 
+    @ApiModelProperty(value = "Trailer link of the watchable")
+    private String trailerLink;
+
     @ApiModelProperty(value = "Duration of the watchable")
     @Positive
     @NotNull

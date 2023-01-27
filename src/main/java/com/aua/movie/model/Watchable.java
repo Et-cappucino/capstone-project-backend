@@ -43,6 +43,9 @@ public class Watchable {
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "trailer_link")
+    private String trailerLink;
+
     @Column(name = "duration", nullable = false)
     private int duration;
 
