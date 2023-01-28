@@ -49,6 +49,12 @@ public class Watchable {
     @Column(name = "duration", nullable = false)
     private int duration;
 
+    @Column(name = "poster_path")
+    private String posterPath;
+
+    @Column(name = "backdrop_path")
+    private String backdropPath;
+
     @ElementCollection(targetClass = Genre.class)
     @JoinTable(name = "Genres", joinColumns = @JoinColumn(name = "watchable_id"))
     @Column(name = "genre", nullable = false)

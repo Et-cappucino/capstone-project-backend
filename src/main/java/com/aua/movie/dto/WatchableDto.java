@@ -49,6 +49,12 @@ public class WatchableDto {
     @NotNull
     private int duration;
 
+    @ApiModelProperty(value = "Poster path of the watchable")
+    private String posterPath;
+
+    @ApiModelProperty(value = "Backdrop image path of the watchable")
+    private String backdropPath;
+
     @ApiModelProperty(value = "Genres of the watchable")
     @Valid
     private List<Genre> genres;
