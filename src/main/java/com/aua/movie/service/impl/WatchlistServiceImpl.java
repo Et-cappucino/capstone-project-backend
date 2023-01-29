@@ -1,5 +1,7 @@
 package com.aua.movie.service.impl;
 
+import com.aua.movie.dto.WatchableDto;
+import com.aua.movie.mapper.WatchableMapper;
 import com.aua.movie.model.Profile;
 import com.aua.movie.model.Watchable;
 import com.aua.movie.repository.ProfileRepository;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +21,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 
     private final ProfileRepository profileRepository;
     private final WatchableRepository watchableRepository;
+    private final WatchableMapper watchableMapper;
 
     @Override
     public void addToWatchlist(Long watchableId, Long profileId) {
@@ -48,9 +52,12 @@ public class WatchlistServiceImpl implements WatchlistService {
     }
 
     @Override
-    public List<Watchable> getProfileWatchlist(Long profileId) {
+    public List<WatchableDto> getProfileWatchlist(Long profileId) {
         Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return profile.getWatchlist();
+        return profile.getWatchlist()
+                .stream()
+                .map(watchableMapper::watchableToWatchableDto)
+                .collect(Collectors.toList());
     }
 }

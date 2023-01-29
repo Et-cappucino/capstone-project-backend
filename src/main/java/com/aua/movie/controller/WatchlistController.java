@@ -1,6 +1,6 @@
 package com.aua.movie.controller;
 
-import com.aua.movie.model.Watchable;
+import com.aua.movie.dto.WatchableDto;
 import com.aua.movie.service.WatchlistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +33,8 @@ public class WatchlistController {
     }
 
     @GetMapping("/{profileId}")
-    public ResponseEntity<List<Watchable>> getProfileWatchlist(@PathVariable Long profileId) {
-        List<Watchable> body = watchlistService.getProfileWatchlist(profileId);
+    public ResponseEntity<List<WatchableDto>> getProfileWatchlist(@PathVariable Long profileId) {
+        List<WatchableDto> body = watchlistService.getProfileWatchlist(profileId);
         return ResponseEntity.ok(body);
     }
 }

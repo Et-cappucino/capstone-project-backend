@@ -1,6 +1,6 @@
 package com.aua.movie.controller;
 
-import com.aua.movie.model.Watchable;
+import com.aua.movie.dto.WatchableDto;
 import com.aua.movie.service.FavoriteWatchablesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +33,8 @@ public class FavoriteWatchablesController {
     }
 
     @GetMapping("/{profileId}")
-    public ResponseEntity<List<Watchable>> getProfileFavorites(@PathVariable Long profileId) {
-        List<Watchable> body = favoriteWatchablesService.getProfileFavorites(profileId);
+    public ResponseEntity<List<WatchableDto>> getProfileFavorites(@PathVariable Long profileId) {
+        List<WatchableDto> body = favoriteWatchablesService.getProfileFavorites(profileId);
         return ResponseEntity.ok(body);
     }
 }
