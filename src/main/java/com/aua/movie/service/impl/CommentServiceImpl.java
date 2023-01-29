@@ -3,7 +3,9 @@ package com.aua.movie.service.impl;
 import com.aua.movie.dto.CommentDto;
 import com.aua.movie.mapper.CommentMapper;
 import com.aua.movie.model.Comment;
+import com.aua.movie.model.Watchable;
 import com.aua.movie.repository.CommentRepository;
+import com.aua.movie.repository.WatchableRepository;
 import com.aua.movie.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
+    private final WatchableRepository watchableRepository;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 
@@ -26,6 +29,15 @@ public class CommentServiceImpl implements CommentService {
         return allComments.stream()
                 .filter(comment -> comment.getCommenter().getId().equals(profileId)
                         && comment.getWatchable().getId().equals(watchableId))
+                .map(commentMapper::commentToCommentDto)
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<CommentDto> findWatchableAllComments(Long watchableId) {
+        Watchable watchable = watchableRepository.findById(watchableId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return watchable.getComments()
+                .stream()
                 .map(commentMapper::commentToCommentDto)
                 .collect(Collectors.toList());
     }

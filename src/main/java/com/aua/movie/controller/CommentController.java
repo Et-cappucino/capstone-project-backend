@@ -38,7 +38,13 @@ public class CommentController {
         return ResponseEntity.ok(body);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{watchableId}")
+    public ResponseEntity<List<CommentDto>> getWatchableAllComments(@PathVariable Long watchableId) {
+        List<CommentDto> body = commentService.findWatchableAllComments(watchableId);
+        return ResponseEntity.ok(body);
+    }
+
+    @GetMapping("/comment-{id}")
     public ResponseEntity<CommentDto> getComment(@PathVariable Long id) {
         CommentDto body = commentService.getComment(id);
         return ResponseEntity.ok(body);

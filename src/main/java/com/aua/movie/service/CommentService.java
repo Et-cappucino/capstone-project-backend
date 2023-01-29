@@ -15,4 +15,6 @@ public interface CommentService {
     CommentDto editComment(CommentDto commentDto, Long commentId);
 
     void deleteComment(Long commentId);
+
+    List<CommentDto> findWatchableAllComments(Long watchableId);
 }
