@@ -9,10 +9,9 @@ import org.mapstruct.Mapping;
 public interface ProfileMapper {
 
     @Mapping(target = "password", ignore = true)
-    @Mapping(target = "comments", source = "profile.comments")
+    @Mapping(target = "isAdmin", expression = "java(profile.isAdmin())")
     ProfileDto profileToProfileDto(Profile profile);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "comments", source = "profileDto.comments")
     Profile profileDtoToProfile(ProfileDto profileDto);
 }

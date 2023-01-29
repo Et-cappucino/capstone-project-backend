@@ -7,11 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Data
 @Builder
@@ -43,16 +41,4 @@ public class ProfileDto {
     @ApiModelProperty(value = "Is the user an admin or not")
     @NotNull
     private boolean isAdmin;
-
-    @ApiModelProperty(value = "Watchlist of movies or series of the user")
-    @Valid
-    private List<WatchableDto> watchlist;
-
-    @ApiModelProperty(value = "Favorite movies or series of the user")
-    @Valid
-    private List<WatchableDto> favorites;
-
-    @ApiModelProperty(value = "Comments of the profile")
-    @Valid
-    private List<CommentDto> comments;
 }
