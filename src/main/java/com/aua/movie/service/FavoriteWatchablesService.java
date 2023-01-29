@@ -1,6 +1,6 @@
 package com.aua.movie.service;
 
-import com.aua.movie.model.Watchable;
+import com.aua.movie.dto.WatchableDto;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ public interface FavoriteWatchablesService {
 
     void removeFromFavorites(Long watchableId, Long profileId);
 
-    List<Watchable> getProfileFavorites(Long profileId);
+    List<WatchableDto> getProfileFavorites(Long profileId);
 }

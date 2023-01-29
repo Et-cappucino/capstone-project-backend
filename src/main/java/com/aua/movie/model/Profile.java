@@ -2,6 +2,7 @@ package com.aua.movie.model;
 
 import lombok.Data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 
@@ -51,4 +53,7 @@ public class Profile {
             joinColumns = @JoinColumn(name = "profile_id"),
             inverseJoinColumns = @JoinColumn(name = "watchable_id"))
     private List<Watchable> favorites;
+
+    @OneToMany(mappedBy = "commenter", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 }
