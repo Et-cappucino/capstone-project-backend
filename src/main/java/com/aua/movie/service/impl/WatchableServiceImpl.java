@@ -51,6 +51,7 @@ public class WatchableServiceImpl implements WatchableService {
         watchable.setName(updatedWatchable.getName());
         watchable.setType(updatedWatchable.getType());
         watchable.setDuration(updatedWatchable.getDuration());
+        watchable.setRating(updatedWatchable.getRating());
         watchable.setTrailerLink(updatedWatchable.getTrailerLink());
         watchable.setPosterPath(updatedWatchable.getPosterPath());
         watchable.setBackdropPath(updatedWatchable.getBackdropPath());

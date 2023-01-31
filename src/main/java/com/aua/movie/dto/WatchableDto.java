@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -43,6 +45,13 @@ public class WatchableDto {
 
     @ApiModelProperty(value = "Trailer link of the watchable")
     private String trailerLink;
+
+    @ApiModelProperty(value = "Rating of the watchable")
+    @Min(value = 0)
+    @Max(value = 10)
+    @Positive
+    @NotNull
+    private double rating;
 
     @ApiModelProperty(value = "Duration of the watchable")
     @Positive
