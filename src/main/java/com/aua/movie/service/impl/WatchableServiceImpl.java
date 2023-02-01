@@ -46,26 +46,29 @@ public class WatchableServiceImpl implements WatchableService {
     public WatchableDto updateWatchable(WatchableDto watchableDto, Long id) {
         Watchable watchable = watchableRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        Watchable updatedWatchable = watchableMapper.watchableDtoToWatchable(watchableDto);
+        Watchable updatedWatchable = update(watchable, watchableMapper.watchableDtoToWatchable(watchableDto));
 
-        watchable.setName(updatedWatchable.getName());
-        watchable.setType(updatedWatchable.getType());
-        watchable.setDuration(updatedWatchable.getDuration());
-        watchable.setRating(updatedWatchable.getRating());
-        watchable.setTrailerLink(updatedWatchable.getTrailerLink());
-        watchable.setPosterPath(updatedWatchable.getPosterPath());
-        watchable.setBackdropPaths(updatedWatchable.getBackdropPaths());
-        watchable.setReleaseDate(updatedWatchable.getReleaseDate());
-        watchable.setDescription(updatedWatchable.getDescription());
-        watchable.setGenres(updatedWatchable.getGenres());
-        watchable.setCast(updatedWatchable.getCast());
-
-        watchableRepository.save(watchable);
-        return watchableMapper.watchableToWatchableDto(watchable);
+        watchableRepository.save(updatedWatchable);
+        return watchableMapper.watchableToWatchableDto(updatedWatchable);
     }
 
     @Override
     public void deleteWatchable(Long id) {
         watchableRepository.deleteById(id);
+    }
+
+    private Watchable update(Watchable current, Watchable updated) {
+        current.setName(updated.getName());
+        current.setType(updated.getType());
+        current.setDuration(updated.getDuration());
+        current.setRating(updated.getRating());
+        current.setTrailerLink(updated.getTrailerLink());
+        current.setPosterPath(updated.getPosterPath());
+        current.setBackdropPaths(updated.getBackdropPaths());
+        current.setReleaseDate(updated.getReleaseDate());
+        current.setDescription(updated.getDescription());
+        current.setGenres(updated.getGenres());
+        current.setCast(updated.getCast());
+        return current;
     }
 }

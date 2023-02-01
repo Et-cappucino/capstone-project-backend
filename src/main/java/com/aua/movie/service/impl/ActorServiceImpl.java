@@ -46,19 +46,22 @@ public class ActorServiceImpl implements ActorService {
     public ActorDto updateActor(ActorDto actorDto, Long id) {
         Actor actor = actorRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        Actor updatedActor = actorMapper.actorDtoToActor(actorDto);
+        Actor updatedActor = update(actor, actorMapper.actorDtoToActor(actorDto));
 
-        actor.setFirstName(updatedActor.getFirstName());
-        actor.setLastName(updatedActor.getLastName());
-        actor.setBirthDate(updatedActor.getBirthDate());
-        actor.setBio(updatedActor.getBio());
-
-        actorRepository.save(actor);
-        return actorMapper.actorToActorDto(actor);
+        actorRepository.save(updatedActor);
+        return actorMapper.actorToActorDto(updatedActor);
     }
 
     @Override
     public void deleteActor(Long id) {
         actorRepository.deleteById(id);
+    }
+
+    private Actor update(Actor current, Actor updated) {
+        current.setFirstName(updated.getFirstName());
+        current.setLastName(updated.getLastName());
+        current.setBirthDate(updated.getBirthDate());
+        current.setBio(updated.getBio());
+        return current;
     }
 }
