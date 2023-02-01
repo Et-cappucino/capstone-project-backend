@@ -60,19 +60,22 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto editComment(CommentDto commentDto, Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        Comment updatedComment = commentMapper.commentDtoToComment(commentDto);
+        Comment updatedComment = update(comment, commentMapper.commentDtoToComment(commentDto));
 
-        comment.setText(updatedComment.getText());
-        comment.setCreatedAt(updatedComment.getCreatedAt());
-        comment.setCommenter(updatedComment.getCommenter());
-        comment.setWatchable(updatedComment.getWatchable());
-
-        commentRepository.save(comment);
-        return commentMapper.commentToCommentDto(comment);
+        commentRepository.save(updatedComment);
+        return commentMapper.commentToCommentDto(updatedComment);
     }
 
     @Override
     public void deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);
+    }
+
+    private Comment update(Comment current, Comment updated) {
+        current.setText(updated.getText());
+        current.setCreatedAt(updated.getCreatedAt());
+        current.setCommenter(updated.getCommenter());
+        current.setWatchable(updated.getWatchable());
+        return current;
     }
 }

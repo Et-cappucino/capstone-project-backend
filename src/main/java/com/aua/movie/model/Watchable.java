@@ -46,14 +46,19 @@ public class Watchable {
     @Column(name = "trailer_link")
     private String trailerLink;
 
+    @Column(name = "rating", nullable = false)
+    private double rating;
+
     @Column(name = "duration", nullable = false)
     private int duration;
 
     @Column(name = "poster_path")
     private String posterPath;
 
-    @Column(name = "backdrop_path")
-    private String backdropPath;
+    @ElementCollection(targetClass = String.class)
+    @JoinTable(name = "Backdrops", joinColumns = @JoinColumn(name = "watchable_id"))
+    @Column(name = "backdrop_path", nullable = false)
+    private List<String> backdropPaths;
 
     @ElementCollection(targetClass = Genre.class)
     @JoinTable(name = "Genres", joinColumns = @JoinColumn(name = "watchable_id"))

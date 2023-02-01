@@ -6,10 +6,12 @@ import com.aua.movie.model.Watchable;
 import com.aua.movie.repository.WatchableRepository;
 import com.aua.movie.service.WatchableService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,12 @@ public class WatchableServiceImpl implements WatchableService {
 
     private final WatchableRepository watchableRepository;
     private final WatchableMapper watchableMapper;
+
+    @Value("${watchableService.popular.rating.min}")
+    private double minRating;
+
+    @Value("${watchableService.latestDate.months}")
+    private long months;
 
     @Override
     public List<WatchableDto> findAll() {
@@ -46,25 +54,61 @@ public class WatchableServiceImpl implements WatchableService {
     public WatchableDto updateWatchable(WatchableDto watchableDto, Long id) {
         Watchable watchable = watchableRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        Watchable updatedWatchable = watchableMapper.watchableDtoToWatchable(watchableDto);
+        Watchable updatedWatchable = update(watchable, watchableMapper.watchableDtoToWatchable(watchableDto));
 
-        watchable.setName(updatedWatchable.getName());
-        watchable.setType(updatedWatchable.getType());
-        watchable.setDuration(updatedWatchable.getDuration());
-        watchable.setTrailerLink(updatedWatchable.getTrailerLink());
-        watchable.setPosterPath(updatedWatchable.getPosterPath());
-        watchable.setBackdropPath(updatedWatchable.getBackdropPath());
-        watchable.setReleaseDate(updatedWatchable.getReleaseDate());
-        watchable.setDescription(updatedWatchable.getDescription());
-        watchable.setGenres(updatedWatchable.getGenres());
-        watchable.setCast(updatedWatchable.getCast());
-
-        watchableRepository.save(watchable);
-        return watchableMapper.watchableToWatchableDto(watchable);
+        watchableRepository.save(updatedWatchable);
+        return watchableMapper.watchableToWatchableDto(updatedWatchable);
     }
 
     @Override
     public void deleteWatchable(Long id) {
         watchableRepository.deleteById(id);
+    }
+
+    @Override
+    public List<WatchableDto> findLatest() {
+        List<Watchable> watchables = watchableRepository.findAll();
+        LocalDate latestDate = LocalDate.now().minusMonths(months);
+
+        return watchables.stream()
+                .filter(watchable -> watchable.getReleaseDate().isAfter(latestDate)
+                        && watchable.getReleaseDate().isBefore(LocalDate.now()))
+                .map(watchableMapper::watchableToWatchableDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<WatchableDto> findPopular() {
+        List<Watchable> watchables = watchableRepository.findAll();
+
+        return watchables.stream()
+                .filter(watchable -> watchable.getRating() >= minRating)
+                .map(watchableMapper::watchableToWatchableDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<WatchableDto> findUpcoming() {
+        List<Watchable> watchables = watchableRepository.findAll();
+
+        return watchables.stream()
+                .filter(watchable -> watchable.getReleaseDate().isAfter(LocalDate.now()))
+                .map(watchableMapper::watchableToWatchableDto)
+                .collect(Collectors.toList());
+    }
+
+    private Watchable update(Watchable current, Watchable updated) {
+        current.setName(updated.getName());
+        current.setType(updated.getType());
+        current.setDuration(updated.getDuration());
+        current.setRating(updated.getRating());
+        current.setTrailerLink(updated.getTrailerLink());
+        current.setPosterPath(updated.getPosterPath());
+        current.setBackdropPaths(updated.getBackdropPaths());
+        current.setReleaseDate(updated.getReleaseDate());
+        current.setDescription(updated.getDescription());
+        current.setGenres(updated.getGenres());
+        current.setCast(updated.getCast());
+        return current;
     }
 }

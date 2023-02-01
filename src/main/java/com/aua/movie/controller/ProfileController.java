@@ -2,6 +2,10 @@ package com.aua.movie.controller;
 
 import com.aua.movie.dto.ProfileDto;
 import com.aua.movie.service.ProfileService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
+@Api(value = "Profile service rest API")
 @Validated
 @RestController
 @RequiredArgsConstructor
@@ -25,30 +30,40 @@ public class ProfileController {
 
     private final ProfileService profileService;
 
+    @ApiOperation(value = "Get all Profiles", tags = "profile-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @GetMapping
     public ResponseEntity<List<ProfileDto>> getAllProfiles() {
         List<ProfileDto> body = profileService.findAll();
         return ResponseEntity.ok(body);
     }
 
+    @ApiOperation(value = "Get a single Profile by ID", tags = "profile-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @GetMapping("/{id}")
     public ResponseEntity<ProfileDto> getProfile(@PathVariable Long id) {
         ProfileDto body = profileService.getProfile(id);
         return ResponseEntity.ok(body);
     }
 
+    @ApiOperation(value = "Create and register a new Profile", response = ProfileDto.class, tags = "profile-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @PostMapping
     public ResponseEntity<ProfileDto> registerProfile(@RequestBody @Valid ProfileDto profileDto) {
         ProfileDto body = profileService.registerProfile(profileDto);
         return ResponseEntity.ok(body);
     }
 
+    @ApiOperation(value = "Update a Profile by ID with a new Profile body", tags = "profile-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @PutMapping("/{id}")
     public ResponseEntity<ProfileDto> updateProfile(@RequestBody @Valid ProfileDto profileDto, @PathVariable Long id) {
         ProfileDto body = profileService.updateProfile(profileDto, id);
         return ResponseEntity.ok(body);
     }
 
+    @ApiOperation(value = "Delete a Profile by ID", tags = "profile-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeProfile(@PathVariable Long id) {
         profileService.deleteProfile(id);
