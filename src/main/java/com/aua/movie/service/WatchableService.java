@@ -15,4 +15,10 @@ public interface WatchableService {
     WatchableDto updateWatchable(WatchableDto watchableDto, Long id);
 
     void deleteWatchable(Long id);
+
+    List<WatchableDto> findLatest();
+
+    List<WatchableDto> findPopular();
+
+    List<WatchableDto> findUpcoming();
 }

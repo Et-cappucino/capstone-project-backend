@@ -38,6 +38,30 @@ public class WatchableController {
         return ResponseEntity.ok(body);
     }
 
+    @ApiOperation(value = "Get all the latest Watchables", tags = "watchable-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
+    @GetMapping("/latest")
+    public ResponseEntity<List<WatchableDto>> getLatestWatchables() {
+        List<WatchableDto> body = watchableService.findLatest();
+        return ResponseEntity.ok(body);
+    }
+
+    @ApiOperation(value = "Get all the popular Watchables", tags = "watchable-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
+    @GetMapping("/popular")
+    public ResponseEntity<List<WatchableDto>> getPopularWatchables() {
+        List<WatchableDto> body = watchableService.findPopular();
+        return ResponseEntity.ok(body);
+    }
+
+    @ApiOperation(value = "Get all the upcoming Watchables", tags = "watchable-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
+    @GetMapping("/upcoming")
+    public ResponseEntity<List<WatchableDto>> getUpcomingWatchables() {
+        List<WatchableDto> body = watchableService.findUpcoming();
+        return ResponseEntity.ok(body);
+    }
+
     @ApiOperation(value = "Get a single Watchable by ID", tags = "watchable-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @GetMapping("/{id}")
