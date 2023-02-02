@@ -15,6 +15,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.aua.movie.model.enums.WatchableType.MOVIE;
+import static com.aua.movie.model.enums.WatchableType.SERIES;
+
 @Service
 @RequiredArgsConstructor
 public class WatchableServiceImpl implements WatchableService {
@@ -93,6 +96,24 @@ public class WatchableServiceImpl implements WatchableService {
 
         return watchables.stream()
                 .filter(watchable -> watchable.getReleaseDate().isAfter(LocalDate.now()))
+                .map(watchableMapper::watchableToWatchableDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<WatchableDto> findAllMovies() {
+        List<Watchable> watchables = watchableRepository.findAll();
+        return watchables.stream()
+                .filter(watchable -> watchable.getType().equals(MOVIE))
+                .map(watchableMapper::watchableToWatchableDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<WatchableDto> findAllSeries() {
+        List<Watchable> watchables = watchableRepository.findAll();
+        return watchables.stream()
+                .filter(watchable -> watchable.getType().equals(SERIES))
                 .map(watchableMapper::watchableToWatchableDto)
                 .collect(Collectors.toList());
     }

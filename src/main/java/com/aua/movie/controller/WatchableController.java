@@ -38,6 +38,22 @@ public class WatchableController {
         return ResponseEntity.ok(body);
     }
 
+    @ApiOperation(value = "Get all Movies from all watchables", tags = "watchable-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
+    @GetMapping("/movies")
+    public ResponseEntity<List<WatchableDto>> getAllMovies() {
+        List<WatchableDto> body = watchableService.findAllMovies();
+        return ResponseEntity.ok(body);
+    }
+
+    @ApiOperation(value = "Get all Series from all watchables", tags = "watchable-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
+    @GetMapping("/series")
+    public ResponseEntity<List<WatchableDto>> getAllSeries() {
+        List<WatchableDto> body = watchableService.findAllSeries();
+        return ResponseEntity.ok(body);
+    }
+
     @ApiOperation(value = "Get all the latest Watchables", tags = "watchable-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @GetMapping("/latest")

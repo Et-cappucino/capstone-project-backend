@@ -8,6 +8,10 @@ public interface WatchableService {
 
     List<WatchableDto> findAll();
 
+    List<WatchableDto> findAllMovies();
+
+    List<WatchableDto> findAllSeries();
+
     WatchableDto getWatchable(Long id);
 
     WatchableDto registerWatchable(WatchableDto watchableDto);
