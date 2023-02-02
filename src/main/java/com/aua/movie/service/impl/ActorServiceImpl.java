@@ -62,6 +62,7 @@ public class ActorServiceImpl implements ActorService {
         current.setLastName(updated.getLastName());
         current.setBirthDate(updated.getBirthDate());
         current.setBio(updated.getBio());
+        current.setImagePath(updated.getImagePath());
         return current;
     }
 }

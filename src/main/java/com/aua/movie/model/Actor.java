@@ -31,4 +31,7 @@ public class Actor {
 
     @Column(name = "bio", columnDefinition = "TEXT")
     private String bio;
+
+    @Column(name = "image_path")
+    private String imagePath;
 }
