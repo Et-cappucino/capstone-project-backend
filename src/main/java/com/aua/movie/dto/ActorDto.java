@@ -35,4 +35,7 @@ public class ActorDto {
 
     @ApiModelProperty(value = "Bio of the actor")
     private String bio;
+
+    @ApiModelProperty(value = "Image path of the actor")
+    private String imagePath;
 }

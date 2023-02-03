@@ -61,6 +61,9 @@ public class WatchableDto {
     @ApiModelProperty(value = "Poster path of the watchable")
     private String posterPath;
 
+    @ApiModelProperty(value = "Main backdrop path of the watchable")
+    private String mainBackdropPath;
+
     @ApiModelProperty(value = "List of all Backdrop image paths of the watchable")
     private List<String> backdropPaths;
 

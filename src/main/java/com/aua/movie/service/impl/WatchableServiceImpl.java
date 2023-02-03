@@ -15,6 +15,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.aua.movie.model.enums.WatchableType.MOVIE;
+import static com.aua.movie.model.enums.WatchableType.SERIES;
+
 @Service
 @RequiredArgsConstructor
 public class WatchableServiceImpl implements WatchableService {
@@ -97,6 +100,24 @@ public class WatchableServiceImpl implements WatchableService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<WatchableDto> findAllMovies() {
+        List<Watchable> watchables = watchableRepository.findAll();
+        return watchables.stream()
+                .filter(watchable -> watchable.getType().equals(MOVIE))
+                .map(watchableMapper::watchableToWatchableDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<WatchableDto> findAllSeries() {
+        List<Watchable> watchables = watchableRepository.findAll();
+        return watchables.stream()
+                .filter(watchable -> watchable.getType().equals(SERIES))
+                .map(watchableMapper::watchableToWatchableDto)
+                .collect(Collectors.toList());
+    }
+
     private Watchable update(Watchable current, Watchable updated) {
         current.setName(updated.getName());
         current.setType(updated.getType());
@@ -104,6 +125,7 @@ public class WatchableServiceImpl implements WatchableService {
         current.setRating(updated.getRating());
         current.setTrailerLink(updated.getTrailerLink());
         current.setPosterPath(updated.getPosterPath());
+        current.setMainBackdropPath(updated.getMainBackdropPath());
         current.setBackdropPaths(updated.getBackdropPaths());
         current.setReleaseDate(updated.getReleaseDate());
         current.setDescription(updated.getDescription());

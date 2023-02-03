@@ -55,6 +55,9 @@ public class Watchable {
     @Column(name = "poster_path")
     private String posterPath;
 
+    @Column(name = "main_backdrop_path")
+    private String mainBackdropPath;
+
     @ElementCollection(targetClass = String.class)
     @JoinTable(name = "Backdrops", joinColumns = @JoinColumn(name = "watchable_id"))
     @Column(name = "backdrop_path", nullable = false)
