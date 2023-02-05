@@ -6,12 +6,11 @@ import com.aua.movie.model.Profile;
 import com.aua.movie.repository.ProfileRepository;
 import com.aua.movie.service.ProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,11 +20,9 @@ public class ProfileServiceImpl implements ProfileService {
     private final ProfileMapper profileMapper;
 
     @Override
-    public List<ProfileDto> findAll() {
-        List<Profile> profiles = profileRepository.findAll();
-        return profiles.stream()
-                .map(profileMapper::profileToProfileDto)
-                .collect(Collectors.toList());
+    public Page<ProfileDto> findAll(Pageable pageRequest) {
+        return profileRepository.findAll(pageRequest)
+                .map(profileMapper::profileToProfileDto);
     }
 
     @Override
