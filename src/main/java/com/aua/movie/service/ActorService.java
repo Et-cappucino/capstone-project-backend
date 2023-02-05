@@ -1,12 +1,12 @@
 package com.aua.movie.service;
 
 import com.aua.movie.dto.ActorDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ActorService {
 
-    List<ActorDto> findAll();
+    Page<ActorDto> findAll(Pageable pageRequest);
 
     ActorDto getActor(Long id);
 
