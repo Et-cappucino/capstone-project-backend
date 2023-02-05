@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,10 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Api(value = "Watchable service rest API")
 @Validated
@@ -30,51 +32,57 @@ public class WatchableController {
 
     private final WatchableService watchableService;
 
-    @ApiOperation(value = "Get all Watchables", tags = "watchable-controller")
+    @ApiOperation(value = "Get all Watchables with pagination support", tags = "watchable-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @GetMapping
-    public ResponseEntity<List<WatchableDto>> getAllWatchables() {
-        List<WatchableDto> body = watchableService.findAll();
+    public ResponseEntity<Page<WatchableDto>> getAllWatchables(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+                                                               @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize) {
+        Page<WatchableDto> body = watchableService.findAll(PageRequest.of(pageNumber, pageSize));
         return ResponseEntity.ok(body);
     }
 
-    @ApiOperation(value = "Get all Movies from all watchables", tags = "watchable-controller")
+    @ApiOperation(value = "Get all Movies from all watchables with pagination support", tags = "watchable-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @GetMapping("/movies")
-    public ResponseEntity<List<WatchableDto>> getAllMovies() {
-        List<WatchableDto> body = watchableService.findAllMovies();
+    public ResponseEntity<Page<WatchableDto>> getAllMovies(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+                                                           @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize) {
+        Page<WatchableDto> body = watchableService.findAllMovies(PageRequest.of(pageNumber, pageSize));
         return ResponseEntity.ok(body);
     }
 
-    @ApiOperation(value = "Get all Series from all watchables", tags = "watchable-controller")
+    @ApiOperation(value = "Get all Series from all watchables with pagination support", tags = "watchable-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @GetMapping("/series")
-    public ResponseEntity<List<WatchableDto>> getAllSeries() {
-        List<WatchableDto> body = watchableService.findAllSeries();
+    public ResponseEntity<Page<WatchableDto>> getAllSeries(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+                                                           @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize) {
+        Page<WatchableDto> body = watchableService.findAllSeries(PageRequest.of(pageNumber, pageSize));
         return ResponseEntity.ok(body);
     }
 
-    @ApiOperation(value = "Get all the latest Watchables", tags = "watchable-controller")
+    @ApiOperation(value = "Get all the latest Watchables with pagination support", tags = "watchable-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @GetMapping("/latest")
-    public ResponseEntity<List<WatchableDto>> getLatestWatchables() {
-        List<WatchableDto> body = watchableService.findLatest();
+    public ResponseEntity<Page<WatchableDto>> getLatestWatchables(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+                                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize) {
+        Page<WatchableDto> body = watchableService.findLatest(PageRequest.of(pageNumber, pageSize));
         return ResponseEntity.ok(body);
     }
 
-    @ApiOperation(value = "Get all the popular Watchables", tags = "watchable-controller")
+    @ApiOperation(value = "Get all the popular Watchables with pagination support", tags = "watchable-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @GetMapping("/popular")
-    public ResponseEntity<List<WatchableDto>> getPopularWatchables() {
-        List<WatchableDto> body = watchableService.findPopular();
+    public ResponseEntity<Page<WatchableDto>> getPopularWatchables(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+                                                                   @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize) {
+        Page<WatchableDto> body = watchableService.findPopular(PageRequest.of(pageNumber, pageSize));
         return ResponseEntity.ok(body);
     }
 
-    @ApiOperation(value = "Get all the upcoming Watchables", tags = "watchable-controller")
+    @ApiOperation(value = "Get all the upcoming Watchables with pagination support", tags = "watchable-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @GetMapping("/upcoming")
-    public ResponseEntity<List<WatchableDto>> getUpcomingWatchables() {
-        List<WatchableDto> body = watchableService.findUpcoming();
+    public ResponseEntity<Page<WatchableDto>> getUpcomingWatchables(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+                                                                    @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize) {
+        Page<WatchableDto> body = watchableService.findUpcoming(PageRequest.of(pageNumber, pageSize));
         return ResponseEntity.ok(body);
     }
 

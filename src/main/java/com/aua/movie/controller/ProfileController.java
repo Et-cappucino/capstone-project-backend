@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,10 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Api(value = "Profile service rest API")
 @Validated
@@ -30,11 +32,12 @@ public class ProfileController {
 
     private final ProfileService profileService;
 
-    @ApiOperation(value = "Get all Profiles", tags = "profile-controller")
+    @ApiOperation(value = "Get all Profiles with pagination support", tags = "profile-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @GetMapping
-    public ResponseEntity<List<ProfileDto>> getAllProfiles() {
-        List<ProfileDto> body = profileService.findAll();
+    public ResponseEntity<Page<ProfileDto>> getAllProfiles(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+                                                           @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize) {
+        Page<ProfileDto> body = profileService.findAll(PageRequest.of(pageNumber, pageSize));
         return ResponseEntity.ok(body);
     }
 

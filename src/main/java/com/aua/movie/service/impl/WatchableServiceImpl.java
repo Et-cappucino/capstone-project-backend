@@ -7,13 +7,13 @@ import com.aua.movie.repository.WatchableRepository;
 import com.aua.movie.service.WatchableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.aua.movie.model.enums.WatchableType.MOVIE;
 import static com.aua.movie.model.enums.WatchableType.SERIES;
@@ -32,11 +32,9 @@ public class WatchableServiceImpl implements WatchableService {
     private long months;
 
     @Override
-    public List<WatchableDto> findAll() {
-        List<Watchable> watchables = watchableRepository.findAll();
-        return watchables.stream()
-                .map(watchableMapper::watchableToWatchableDto)
-                .collect(Collectors.toList());
+    public Page<WatchableDto> findAll(Pageable pageRequest) {
+        return watchableRepository.findAll(pageRequest)
+                .map(watchableMapper::watchableToWatchableDto);
     }
 
     @Override
@@ -69,53 +67,34 @@ public class WatchableServiceImpl implements WatchableService {
     }
 
     @Override
-    public List<WatchableDto> findLatest() {
-        List<Watchable> watchables = watchableRepository.findAll();
-        LocalDate latestDate = LocalDate.now().minusMonths(months);
-
-        return watchables.stream()
-                .filter(watchable -> watchable.getReleaseDate().isAfter(latestDate)
-                        && watchable.getReleaseDate().isBefore(LocalDate.now()))
-                .map(watchableMapper::watchableToWatchableDto)
-                .collect(Collectors.toList());
+    public Page<WatchableDto> findLatest(Pageable pageRequest) {
+        LocalDate cutOffDate = LocalDate.now().minusMonths(months);
+        return watchableRepository.findAllLatest(cutOffDate, LocalDate.now(), pageRequest)
+                .map(watchableMapper::watchableToWatchableDto);
     }
 
     @Override
-    public List<WatchableDto> findPopular() {
-        List<Watchable> watchables = watchableRepository.findAll();
-
-        return watchables.stream()
-                .filter(watchable -> watchable.getRating() >= minRating)
-                .map(watchableMapper::watchableToWatchableDto)
-                .collect(Collectors.toList());
+    public Page<WatchableDto> findPopular(Pageable pageRequest) {
+        return watchableRepository.findAllPopular(minRating, pageRequest)
+                .map(watchableMapper::watchableToWatchableDto);
     }
 
     @Override
-    public List<WatchableDto> findUpcoming() {
-        List<Watchable> watchables = watchableRepository.findAll();
-
-        return watchables.stream()
-                .filter(watchable -> watchable.getReleaseDate().isAfter(LocalDate.now()))
-                .map(watchableMapper::watchableToWatchableDto)
-                .collect(Collectors.toList());
+    public Page<WatchableDto> findUpcoming(Pageable pageRequest) {
+        return watchableRepository.findAllUpcoming(LocalDate.now(), pageRequest)
+                .map(watchableMapper::watchableToWatchableDto);
     }
 
     @Override
-    public List<WatchableDto> findAllMovies() {
-        List<Watchable> watchables = watchableRepository.findAll();
-        return watchables.stream()
-                .filter(watchable -> watchable.getType().equals(MOVIE))
-                .map(watchableMapper::watchableToWatchableDto)
-                .collect(Collectors.toList());
+    public Page<WatchableDto> findAllMovies(Pageable pageRequest) {
+        return watchableRepository.findAllByType(MOVIE, pageRequest)
+                .map(watchableMapper::watchableToWatchableDto);
     }
 
     @Override
-    public List<WatchableDto> findAllSeries() {
-        List<Watchable> watchables = watchableRepository.findAll();
-        return watchables.stream()
-                .filter(watchable -> watchable.getType().equals(SERIES))
-                .map(watchableMapper::watchableToWatchableDto)
-                .collect(Collectors.toList());
+    public Page<WatchableDto> findAllSeries(Pageable pageRequest) {
+        return watchableRepository.findAllByType(SERIES, pageRequest)
+                .map(watchableMapper::watchableToWatchableDto);
     }
 
     private Watchable update(Watchable current, Watchable updated) {

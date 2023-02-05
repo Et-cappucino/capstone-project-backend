@@ -1,16 +1,16 @@
 package com.aua.movie.service;
 
 import com.aua.movie.dto.WatchableDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface WatchableService {
 
-    List<WatchableDto> findAll();
+    Page<WatchableDto> findAll(Pageable pageRequest);
 
-    List<WatchableDto> findAllMovies();
+    Page<WatchableDto> findAllMovies(Pageable pageRequest);
 
-    List<WatchableDto> findAllSeries();
+    Page<WatchableDto> findAllSeries(Pageable pageRequest);
 
     WatchableDto getWatchable(Long id);
 
@@ -20,9 +20,9 @@ public interface WatchableService {
 
     void deleteWatchable(Long id);
 
-    List<WatchableDto> findLatest();
+    Page<WatchableDto> findLatest(Pageable pageRequest);
 
-    List<WatchableDto> findPopular();
+    Page<WatchableDto> findPopular(Pageable pageRequest);
 
-    List<WatchableDto> findUpcoming();
+    Page<WatchableDto> findUpcoming(Pageable pageRequest);
 }
