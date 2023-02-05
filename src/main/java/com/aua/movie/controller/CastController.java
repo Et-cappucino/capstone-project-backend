@@ -1,6 +1,6 @@
 package com.aua.movie.controller;
 
-import com.aua.movie.model.Actor;
+import com.aua.movie.dto.ActorDto;
 import com.aua.movie.service.CastService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,8 +44,8 @@ public class CastController {
     @ApiOperation(value = "Get a Watchable's Cast by ID", tags = "cast-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @GetMapping("/{watchableId}")
-    public ResponseEntity<List<Actor>> getWatchableCast(@PathVariable Long watchableId) {
-        List<Actor> body = castService.getWatchableCast(watchableId);
+    public ResponseEntity<List<ActorDto>> getWatchableCast(@PathVariable Long watchableId) {
+        List<ActorDto> body = castService.getWatchableCast(watchableId);
         return ResponseEntity.ok(body);
     }
 }

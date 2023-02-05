@@ -1,6 +1,6 @@
 package com.aua.movie.service;
 
-import com.aua.movie.model.Actor;
+import com.aua.movie.dto.ActorDto;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ public interface CastService {
 
     void removeFromCast(Long actorId, Long watchableId);
 
-    List<Actor> getWatchableCast(Long watchableId);
+    List<ActorDto> getWatchableCast(Long watchableId);
 }
