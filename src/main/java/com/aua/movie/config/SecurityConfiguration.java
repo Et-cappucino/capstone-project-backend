@@ -2,7 +2,10 @@ package com.aua.movie.config;
 
 import com.aua.movie.filter.JwtAuthenticationFilter;
 import com.aua.movie.filter.JwtAuthorizationFilter;
+import com.aua.movie.filter.JwtExceptionDelegatingFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,6 +17,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +28,10 @@ public class SecurityConfiguration {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final JwtConfigurationProperties jwtConfigurationProperties;
+
+    @Autowired
+    @Qualifier("handlerExceptionResolver")
+    private HandlerExceptionResolver exceptionResolver;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,7 +46,8 @@ public class SecurityConfiguration {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(authenticationFilter)
-                .addFilterBefore(new JwtAuthorizationFilter(jwtConfigurationProperties), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthorizationFilter(jwtConfigurationProperties), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionDelegatingFilter(exceptionResolver), LogoutFilter.class);
         return http.build();
     }
 
