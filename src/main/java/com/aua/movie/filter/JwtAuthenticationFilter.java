@@ -1,5 +1,6 @@
 package com.aua.movie.filter;
 
+import com.aua.movie.config.JwtConfigurationProperties;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +24,7 @@ import java.util.stream.Collectors;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationProvider authenticationProvider;
-
-    private static final String SECRET = "secret";
-    private static final int ACCESS_TOKEN_EXPIRATION_MINUTES = 5;
-    private static final int REFRESH_TOKEN_EXPIRATION_MINUTES = 10;
+    private final JwtConfigurationProperties jwtConfigurationProperties;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
@@ -44,12 +42,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication authentication) throws IOException, ServletException {
         User user = (User) authentication.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256(SECRET.getBytes());
+        Algorithm algorithm = Algorithm.HMAC256(jwtConfigurationProperties.getSecret().getBytes());
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
                 .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(new Date(System.currentTimeMillis()
-                        + ACCESS_TOKEN_EXPIRATION_MINUTES * 60 * 1000))
+                        + jwtConfigurationProperties.getExpirationTime() * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
@@ -60,7 +58,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withSubject(user.getUsername())
                 .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(new Date(System.currentTimeMillis()
-                        + REFRESH_TOKEN_EXPIRATION_MINUTES * 60 * 1000))
+                        + jwtConfigurationProperties.getRefreshExpirationTime() * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
 

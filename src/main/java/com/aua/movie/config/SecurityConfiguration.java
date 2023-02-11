@@ -20,10 +20,11 @@ public class SecurityConfiguration {
 
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtConfigurationProperties jwtConfigurationProperties;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter(authenticationProvider());
+        JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter(authenticationProvider(), jwtConfigurationProperties);
         authenticationFilter.setFilterProcessesUrl("/api/login");
         http
                 .csrf().disable()
