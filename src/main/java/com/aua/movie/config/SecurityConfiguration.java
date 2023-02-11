@@ -1,5 +1,6 @@
 package com.aua.movie.config;
 
+import com.aua.movie.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,13 +23,17 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter(authenticationProvider());
+        authenticationFilter.setFilterProcessesUrl("/api/login");
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .antMatchers("/login/**").permitAll()
+                .antMatchers("/api/login/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilter(authenticationFilter);
         return http.build();
     }
 
