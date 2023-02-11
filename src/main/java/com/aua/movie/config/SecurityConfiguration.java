@@ -1,6 +1,7 @@
 package com.aua.movie.config;
 
 import com.aua.movie.filter.JwtAuthenticationFilter;
+import com.aua.movie.filter.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -34,7 +36,8 @@ public class SecurityConfiguration {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilter(authenticationFilter);
+                .addFilter(authenticationFilter)
+                .addFilterBefore(new JwtAuthorizationFilter(jwtConfigurationProperties), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
