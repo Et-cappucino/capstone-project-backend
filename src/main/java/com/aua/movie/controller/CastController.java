@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,7 @@ public class CastController {
     @ApiOperation(value = "Add an Actor to the Watchable's Cast by IDs", tags = "cast-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @PostMapping("/{watchableId}/{actorId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> addToCast(@PathVariable Long actorId, @PathVariable Long watchableId) {
         castService.addToCast(actorId, watchableId);
         return ResponseEntity.ok().build();
@@ -36,6 +38,7 @@ public class CastController {
     @ApiOperation(value = "Remove an Actor from the Watchable's Cast by IDs", tags = "cast-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @DeleteMapping("/{watchableId}/{actorId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> removeFromCast(@PathVariable Long actorId, @PathVariable Long watchableId) {
         castService.removeFromCast(actorId, watchableId);
         return ResponseEntity.ok().build();

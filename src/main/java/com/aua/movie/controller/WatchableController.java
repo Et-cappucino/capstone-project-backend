@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -97,6 +98,7 @@ public class WatchableController {
     @ApiOperation(value = "Create and register a new Watchable", response = WatchableDto.class, tags = "watchable-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<WatchableDto> registerWatchable(@RequestBody @Valid WatchableDto watchableDto) {
         WatchableDto body = watchableService.registerWatchable(watchableDto);
         return ResponseEntity.ok(body);
@@ -105,6 +107,7 @@ public class WatchableController {
     @ApiOperation(value = "Update a Watchable by ID with a new Watchable body", tags = "watchable-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<WatchableDto> updateWatchable(@RequestBody @Valid WatchableDto watchableDto, @PathVariable Long id) {
         WatchableDto body = watchableService.updateWatchable(watchableDto, id);
         return ResponseEntity.ok(body);
@@ -113,6 +116,7 @@ public class WatchableController {
     @ApiOperation(value = "Delete a Watchable by ID", tags = "watchable-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> removeWatchable(@PathVariable Long id) {
         watchableService.deleteWatchable(id);
         return ResponseEntity.ok().build();

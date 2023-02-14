@@ -26,7 +26,7 @@ public class Actor {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "birth_Date", nullable = false)
+    @Column(name = "birth_Date")
     private LocalDate birthDate;
 
     @Column(name = "bio", columnDefinition = "TEXT")
