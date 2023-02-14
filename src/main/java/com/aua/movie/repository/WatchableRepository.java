@@ -26,4 +26,20 @@ public interface WatchableRepository extends JpaRepository<Watchable, Long> {
 
     @Query("SELECT w FROM Watchable w WHERE w.releaseDate > :now")
     Page<Watchable> findAllUpcoming(@Param("now") LocalDate now, Pageable pageRequest);
+
+    @Query("SELECT w FROM Watchable w WHERE w.releaseDate > :cutoffDate AND w.releaseDate < :now AND w.type = :type")
+    Page<Watchable> findLatest(@Param("cutoffDate") LocalDate cutoffDate,
+                               @Param("now") LocalDate now,
+                               @Param("type") WatchableType type,
+                               Pageable pageRequest);
+
+    @Query("SELECT w FROM Watchable w WHERE w.rating >= :minRating AND w.type = :type")
+    Page<Watchable> findPopular(@Param("minRating") double minRating,
+                                @Param("type") WatchableType type,
+                                Pageable pageRequest);
+
+    @Query("SELECT w FROM Watchable w WHERE w.releaseDate > :now AND w.type = :type")
+    Page<Watchable> findUpcoming(@Param("now") LocalDate now,
+                                 @Param("type") WatchableType type,
+                                 Pageable pageRequest);
 }
