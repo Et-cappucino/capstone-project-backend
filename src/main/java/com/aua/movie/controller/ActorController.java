@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,6 +53,7 @@ public class ActorController {
     @ApiOperation(value = "Create and register a new Actor", response = ActorDto.class, tags = "actor-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ActorDto> registerActor(@RequestBody @Valid ActorDto actorDto) {
         ActorDto body = actorService.registerActor(actorDto);
         return ResponseEntity.ok(body);
@@ -60,6 +62,7 @@ public class ActorController {
     @ApiOperation(value = "Update an Actor by ID with a new Actor body", tags = "actor-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ActorDto> updateActor(@RequestBody @Valid ActorDto actorDto, @PathVariable Long id) {
         ActorDto body = actorService.updateActor(actorDto, id);
         return ResponseEntity.ok(body);
@@ -68,6 +71,7 @@ public class ActorController {
     @ApiOperation(value = "Delete an Actor by ID", tags = "actor-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> removeActor(@PathVariable Long id) {
         actorService.deleteActor(id);
         return ResponseEntity.ok().build();
