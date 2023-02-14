@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -56,7 +57,13 @@ public class SecurityConfiguration {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().antMatchers("/v2/api-docs/**",
+        return web -> web.ignoring()
+                .antMatchers(HttpMethod.GET, "/api/watchables/**")
+                .antMatchers(HttpMethod.GET, "/api/actors/**")
+                .antMatchers(HttpMethod.GET, "/api/comments/**")
+                .antMatchers(HttpMethod.GET, "/api/cast/**")
+                .antMatchers(HttpMethod.POST, "/api/profiles")
+                .antMatchers("/v2/api-docs/**",
                 "/configuration/ui",
                 "/swagger-resources/**",
                 "/configuration/security",
