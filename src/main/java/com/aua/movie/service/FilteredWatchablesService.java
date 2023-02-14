@@ -6,6 +6,16 @@ import org.springframework.data.domain.Pageable;
 
 public interface FilteredWatchablesService {
 
+    Page<WatchableDto> findAllMovies(Pageable pageRequest);
+
+    Page<WatchableDto> findAllSeries(Pageable pageRequest);
+
+    Page<WatchableDto> findLatest(Pageable pageRequest);
+
+    Page<WatchableDto> findPopular(Pageable pageRequest);
+
+    Page<WatchableDto> findUpcoming(Pageable pageRequest);
+
     Page<WatchableDto> findLatestMovies(Pageable pageRequest);
 
     Page<WatchableDto> findPopularMovies(Pageable pageRequest);

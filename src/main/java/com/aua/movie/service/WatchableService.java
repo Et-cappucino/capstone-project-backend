@@ -8,10 +8,6 @@ public interface WatchableService {
 
     Page<WatchableDto> findAll(Pageable pageRequest);
 
-    Page<WatchableDto> findAllMovies(Pageable pageRequest);
-
-    Page<WatchableDto> findAllSeries(Pageable pageRequest);
-
     WatchableDto getWatchable(Long id);
 
     WatchableDto registerWatchable(WatchableDto watchableDto);
@@ -19,10 +15,4 @@ public interface WatchableService {
     WatchableDto updateWatchable(WatchableDto watchableDto, Long id);
 
     void deleteWatchable(Long id);
-
-    Page<WatchableDto> findLatest(Pageable pageRequest);
-
-    Page<WatchableDto> findPopular(Pageable pageRequest);
-
-    Page<WatchableDto> findUpcoming(Pageable pageRequest);
 }

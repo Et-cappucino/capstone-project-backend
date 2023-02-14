@@ -29,6 +29,37 @@ public class FilteredWatchablesServiceImpl implements FilteredWatchablesService 
     private long months;
 
     @Override
+    public Page<WatchableDto> findAllMovies(Pageable pageRequest) {
+        return watchableRepository.findAllByType(MOVIE, pageRequest)
+                .map(watchableMapper::watchableToWatchableDto);
+    }
+
+    @Override
+    public Page<WatchableDto> findAllSeries(Pageable pageRequest) {
+        return watchableRepository.findAllByType(SERIES, pageRequest)
+                .map(watchableMapper::watchableToWatchableDto);
+    }
+
+    @Override
+    public Page<WatchableDto> findLatest(Pageable pageRequest) {
+        LocalDate cutOffDate = LocalDate.now().minusMonths(months);
+        return watchableRepository.findAllLatest(cutOffDate, LocalDate.now(), pageRequest)
+                .map(watchableMapper::watchableToWatchableDto);
+    }
+
+    @Override
+    public Page<WatchableDto> findPopular(Pageable pageRequest) {
+        return watchableRepository.findAllPopular(minRating, pageRequest)
+                .map(watchableMapper::watchableToWatchableDto);
+    }
+
+    @Override
+    public Page<WatchableDto> findUpcoming(Pageable pageRequest) {
+        return watchableRepository.findAllUpcoming(LocalDate.now(), pageRequest)
+                .map(watchableMapper::watchableToWatchableDto);
+    }
+
+    @Override
     public Page<WatchableDto> findLatestMovies(Pageable pageRequest) {
         LocalDate cutOffDate = LocalDate.now().minusMonths(months);
         return watchableRepository.findLatest(cutOffDate, LocalDate.now(), MOVIE, pageRequest)
