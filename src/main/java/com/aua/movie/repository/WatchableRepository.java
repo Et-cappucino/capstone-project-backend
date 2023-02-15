@@ -1,6 +1,7 @@
 package com.aua.movie.repository;
 
 import com.aua.movie.model.Watchable;
+import com.aua.movie.model.enums.Genre;
 import com.aua.movie.model.enums.WatchableType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,4 +45,8 @@ public interface WatchableRepository extends JpaRepository<Watchable, Long> {
                                  Pageable pageRequest);
 
     Page<Watchable> findByNameStartingWithIgnoreCase(String name, Pageable pageRequest);
+
+    Page<Watchable> findByGenres(Genre genre, Pageable pageRequest);
+
+    Page<Watchable> findByReleaseDateBetween(LocalDate startDate, LocalDate endDate, Pageable pageRequest);
 }
