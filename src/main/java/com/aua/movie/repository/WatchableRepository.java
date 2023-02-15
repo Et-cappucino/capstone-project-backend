@@ -42,4 +42,6 @@ public interface WatchableRepository extends JpaRepository<Watchable, Long> {
     Page<Watchable> findUpcoming(@Param("now") LocalDate now,
                                  @Param("type") WatchableType type,
                                  Pageable pageRequest);
+
+    Page<Watchable> findByNameStartingWithIgnoreCase(String name, Pageable pageRequest);
 }
