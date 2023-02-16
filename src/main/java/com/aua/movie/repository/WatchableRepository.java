@@ -1,6 +1,7 @@
 package com.aua.movie.repository;
 
 import com.aua.movie.model.Watchable;
+import com.aua.movie.model.enums.Genre;
 import com.aua.movie.model.enums.WatchableType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,4 +27,30 @@ public interface WatchableRepository extends JpaRepository<Watchable, Long> {
 
     @Query("SELECT w FROM Watchable w WHERE w.releaseDate > :now")
     Page<Watchable> findAllUpcoming(@Param("now") LocalDate now, Pageable pageRequest);
+
+    @Query("SELECT w FROM Watchable w WHERE w.releaseDate > :cutoffDate AND w.releaseDate < :now AND w.type = :type")
+    Page<Watchable> findLatest(@Param("cutoffDate") LocalDate cutoffDate,
+                               @Param("now") LocalDate now,
+                               @Param("type") WatchableType type,
+                               Pageable pageRequest);
+
+    @Query("SELECT w FROM Watchable w WHERE w.rating >= :minRating AND w.type = :type")
+    Page<Watchable> findPopular(@Param("minRating") double minRating,
+                                @Param("type") WatchableType type,
+                                Pageable pageRequest);
+
+    @Query("SELECT w FROM Watchable w WHERE w.releaseDate > :now AND w.type = :type")
+    Page<Watchable> findUpcoming(@Param("now") LocalDate now,
+                                 @Param("type") WatchableType type,
+                                 Pageable pageRequest);
+
+    Page<Watchable> findByNameStartingWithIgnoreCase(String name, Pageable pageRequest);
+
+    Page<Watchable> findByGenres(Genre genre, Pageable pageRequest);
+
+    Page<Watchable> findByReleaseDateBetween(LocalDate startDate, LocalDate endDate, Pageable pageRequest);
+
+    Page<Watchable> findByTypeAndGenres(WatchableType type, Genre genre, Pageable pageRequest);
+
+    Page<Watchable> findByTypeAndReleaseDateBetween(WatchableType type, LocalDate startDate, LocalDate endDate, Pageable pageRequest);
 }
