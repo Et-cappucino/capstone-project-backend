@@ -59,4 +59,48 @@ public class SearchController {
         Page<WatchableDto> body = searchService.searchWatchableByReleaseYear(releaseYear, PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, sort)));
         return ResponseEntity.ok(body);
     }
+
+    @ApiOperation(value = "Get movies by Genre search with pagination and sorting support", tags = "search-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
+    @GetMapping("/movie/genre")
+    public ResponseEntity<Page<WatchableDto>> searchMoviesByGenre(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+                                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize,
+                                                                  @RequestParam(name = "sort", defaultValue = "rating") String sort,
+                                                                  @RequestParam(value = "genre", required = false) Genre genre) {
+        Page<WatchableDto> body = searchService.searchMovieByGenre(genre, PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, sort)));
+        return ResponseEntity.ok(body);
+    }
+
+    @ApiOperation(value = "Get movies by Release Year search with pagination and sorting support", tags = "search-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
+    @GetMapping("/movie/releaseYear")
+    public ResponseEntity<Page<WatchableDto>> searchMoviesByReleaseYear(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+                                                                        @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize,
+                                                                        @RequestParam(name = "sort", defaultValue = "releaseDate") String sort,
+                                                                        @RequestParam(value = "releaseYear", required = false) Integer releaseYear) {
+        Page<WatchableDto> body = searchService.searchMovieReleaseYear(releaseYear, PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, sort)));
+        return ResponseEntity.ok(body);
+    }
+
+    @ApiOperation(value = "Get series by Genre search with pagination and sorting support", tags = "search-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
+    @GetMapping("/series/genre")
+    public ResponseEntity<Page<WatchableDto>> searchSeriesByGenre(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+                                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize,
+                                                                  @RequestParam(name = "sort", defaultValue = "rating") String sort,
+                                                                  @RequestParam(value = "genre", required = false) Genre genre) {
+        Page<WatchableDto> body = searchService.searchSeriesByGenre(genre, PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, sort)));
+        return ResponseEntity.ok(body);
+    }
+
+    @ApiOperation(value = "Get series by Release Year search with pagination and sorting support", tags = "search-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
+    @GetMapping("/series/releaseYear")
+    public ResponseEntity<Page<WatchableDto>> searchSeriesByReleaseYear(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+                                                                        @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize,
+                                                                        @RequestParam(name = "sort", defaultValue = "releaseDate") String sort,
+                                                                        @RequestParam(value = "releaseYear", required = false) Integer releaseYear) {
+        Page<WatchableDto> body = searchService.searchSeriesByReleaseYear(releaseYear, PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, sort)));
+        return ResponseEntity.ok(body);
+    }
 }

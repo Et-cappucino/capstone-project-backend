@@ -12,4 +12,12 @@ public interface SearchService {
     Page<WatchableDto> searchWatchableByGenre(Genre genre, Pageable pageRequest);
 
     Page<WatchableDto> searchWatchableByReleaseYear(Integer releaseYear, Pageable pageRequest);
+
+    Page<WatchableDto> searchMovieByGenre(Genre genre, Pageable pageRequest);
+
+    Page<WatchableDto> searchSeriesByGenre(Genre genre, Pageable pageRequest);
+
+    Page<WatchableDto> searchMovieReleaseYear(Integer releaseYear, Pageable pageRequest);
+
+    Page<WatchableDto> searchSeriesByReleaseYear(Integer releaseYear, Pageable pageRequest);
 }

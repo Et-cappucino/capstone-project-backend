@@ -49,4 +49,8 @@ public interface WatchableRepository extends JpaRepository<Watchable, Long> {
     Page<Watchable> findByGenres(Genre genre, Pageable pageRequest);
 
     Page<Watchable> findByReleaseDateBetween(LocalDate startDate, LocalDate endDate, Pageable pageRequest);
+
+    Page<Watchable> findByTypeAndGenres(WatchableType type, Genre genre, Pageable pageRequest);
+
+    Page<Watchable> findByTypeAndReleaseDateBetween(WatchableType type, LocalDate startDate, LocalDate endDate, Pageable pageRequest);
 }
