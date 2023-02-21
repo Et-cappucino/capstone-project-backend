@@ -1,12 +1,12 @@
 package com.aua.movie.service;
 
 import com.aua.movie.dto.CommentDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface CommentService {
 
-    List<CommentDto> findAllComments(Long profileId, Long watchableId);
+    Page<CommentDto> findAllComments(Long profileId, Long watchableId, Pageable pageRequest);
 
     CommentDto getComment(Long commentId);
 
@@ -16,5 +16,7 @@ public interface CommentService {
 
     void deleteComment(Long commentId);
 
-    List<CommentDto> findWatchableAllComments(Long watchableId);
+    Page<CommentDto> findWatchableAllComments(Long watchableId, Pageable pageRequest);
+
+    Page<CommentDto> findProfileAllComments(Long profileId, Pageable pageRequest);
 }
