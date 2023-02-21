@@ -24,7 +24,7 @@ public enum Genre {
     SCIENCE_FICTION(14, "Science Fiction"),
     TV_MOVIE(15, "TV-Movie"),
     THRILLER(16, "Thriller"),
-    WAR(17, "Wer"),
+    WAR(17, "War"),
     WESTERN(18, "Western");
 
     private final int id;
