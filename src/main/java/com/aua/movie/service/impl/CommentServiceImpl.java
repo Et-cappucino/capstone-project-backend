@@ -8,6 +8,8 @@ import com.aua.movie.repository.CommentRepository;
 import com.aua.movie.repository.WatchableRepository;
 import com.aua.movie.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -40,6 +42,12 @@ public class CommentServiceImpl implements CommentService {
                 .stream()
                 .map(commentMapper::commentToCommentDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<CommentDto> findProfileAllComments(Long profileId, Pageable pageRequest) {
+        return commentRepository.findAllByCommenterId(profileId, pageRequest)
+                .map(commentMapper::commentToCommentDto);
     }
 
     @Override
