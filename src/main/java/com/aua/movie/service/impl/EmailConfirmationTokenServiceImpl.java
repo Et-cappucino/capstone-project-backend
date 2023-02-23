@@ -42,6 +42,12 @@ public class EmailConfirmationTokenServiceImpl implements EmailConfirmationToken
 
     @Override
     public void confirmToken(String token) {
+        EmailConfirmationToken confirmationToken = validateConfirmationToken(token);
+        setConfirmedAt(token);
+        enableProfile(confirmationToken.getProfile().getEmail());
+    }
+
+    private EmailConfirmationToken validateConfirmationToken(String token) {
         EmailConfirmationToken confirmationToken = emailConfirmationTokenRepository.findByToken(token)
                 .orElseThrow(() -> new ConfirmationTokenNotFoundException("Confirmation Token " + token + " was not found"));
 
@@ -55,9 +61,7 @@ public class EmailConfirmationTokenServiceImpl implements EmailConfirmationToken
             profileRepository.deleteById(confirmationToken.getProfile().getId());
             throw new ConfirmationTokenExpiredException("Confirmation Token " + token + " has already expired");
         }
-
-        setConfirmedAt(token);
-        enableProfile(confirmationToken.getProfile().getEmail());
+        return confirmationToken;
     }
 
     private void setConfirmedAt(String token) {
