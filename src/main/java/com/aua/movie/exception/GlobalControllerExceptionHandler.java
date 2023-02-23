@@ -8,7 +8,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.GONE;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestControllerAdvice
 public class GlobalControllerExceptionHandler {
@@ -31,5 +33,35 @@ public class GlobalControllerExceptionHandler {
                 ZonedDateTime.now(ZoneId.of("Z"))
         );
         return ResponseEntity.status(FORBIDDEN).body(exceptionDetails);
+    }
+
+    @ExceptionHandler(ConfirmationTokenNotFoundException.class)
+    public ResponseEntity<Object> handleConfirmationTokenNotFoundException(ConfirmationTokenNotFoundException exception) {
+        ExceptionDetails exceptionDetails = new ExceptionDetails(
+                exception.getMessage(),
+                exception.getClass().getSimpleName(),
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+        return ResponseEntity.status(NOT_FOUND).body(exceptionDetails);
+    }
+
+    @ExceptionHandler(EmailAlreadyConfirmedException.class)
+    public ResponseEntity<Object> handleEmailAlreadyConfirmedException(EmailAlreadyConfirmedException exception) {
+        ExceptionDetails exceptionDetails = new ExceptionDetails(
+                exception.getMessage(),
+                exception.getClass().getSimpleName(),
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+        return ResponseEntity.status(GONE).body(exceptionDetails);
+    }
+
+    @ExceptionHandler(ConfirmationTokenExpiredException.class)
+    public ResponseEntity<Object> handleConfirmationTokenExpiredException(ConfirmationTokenExpiredException exception) {
+        ExceptionDetails exceptionDetails = new ExceptionDetails(
+                exception.getMessage(),
+                exception.getClass().getSimpleName(),
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+        return ResponseEntity.status(GONE).body(exceptionDetails);
     }
 }

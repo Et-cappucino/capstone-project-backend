@@ -1,5 +1,8 @@
 package com.aua.movie.service.impl;
 
+import com.aua.movie.exception.ConfirmationTokenExpiredException;
+import com.aua.movie.exception.ConfirmationTokenNotFoundException;
+import com.aua.movie.exception.EmailAlreadyConfirmedException;
 import com.aua.movie.model.EmailConfirmationToken;
 import com.aua.movie.model.Profile;
 import com.aua.movie.repository.EmailConfirmationTokenRepository;
@@ -40,15 +43,17 @@ public class EmailConfirmationTokenServiceImpl implements EmailConfirmationToken
     @Override
     public void confirmToken(String token) {
         EmailConfirmationToken confirmationToken = emailConfirmationTokenRepository.findByToken(token)
-                .orElseThrow(() -> new IllegalStateException("Confirmation Token not found"));
+                .orElseThrow(() -> new ConfirmationTokenNotFoundException("Confirmation Token " + token + " was not found"));
 
         if (confirmationToken.getConfirmedAt() != null) {
-            throw new IllegalStateException("Email already confirmed");
+            throw new EmailAlreadyConfirmedException("Email has been already confirmed");
         }
 
         LocalDateTime expiresAt = confirmationToken.getExpiresAt();
         if (expiresAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("Token has already expired");
+            emailConfirmationTokenRepository.delete(confirmationToken);
+            profileRepository.deleteById(confirmationToken.getProfile().getId());
+            throw new ConfirmationTokenExpiredException("Confirmation Token " + token + " has already expired");
         }
 
         setConfirmedAt(token);
