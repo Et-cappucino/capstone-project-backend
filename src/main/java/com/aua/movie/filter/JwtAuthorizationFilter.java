@@ -32,7 +32,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        boolean shouldBeIgnored = Stream.of("/api/login", "/api/token/refresh")
+        boolean shouldBeIgnored = Stream.of("/api/login", "/api/token/refresh", "/api/profile/confirm")
                 .anyMatch(path -> request.getServletPath().contains(path));
         if (!shouldBeIgnored) {
             String authorizationHeader = request.getHeader(AUTHORIZATION);

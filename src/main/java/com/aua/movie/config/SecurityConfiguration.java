@@ -44,7 +44,7 @@ public class SecurityConfiguration {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .antMatchers("/api/login/**", "/api/token/refresh/**").permitAll()
+                .antMatchers("/api/login/**", "/api/token/refresh/**", "/api/profile/confirm").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
