@@ -3,6 +3,8 @@ package com.aua.movie.service.impl;
 import com.aua.movie.service.MailSenderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -11,6 +13,9 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import java.io.IOException;
+import java.nio.file.Files;
+
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Service
@@ -18,6 +23,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class MailSenderServiceImpl implements MailSenderService {
 
     private final JavaMailSender mailSender;
+    private final ResourceLoader resourceLoader;
 
     @Value("${spring.mail.username}")
     private String from;
@@ -43,10 +49,14 @@ public class MailSenderServiceImpl implements MailSenderService {
 
     @Override
     public String buildMail(String name, String link) {
-        return "<html><body><h1>Hi " + name + ",</h1>"
-                + "<p>Thank you for signing up for our service. Please click the link below to confirm your account:</p>"
-                + "<a style=\"background-color: #E53E3E; border: none; color: white; padding: 16px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 25px; margin: 4px 2px; cursor: pointer; border-radius: 13px;\" href="
-                + link + ">" + "Confirm" + "</a>"
-                + "</body></html>";
+        Resource resource = resourceLoader.getResource("classpath:static/view/confirmation-email.html");
+        try {
+            String content = new String(Files.readAllBytes(resource.getFile().toPath()));
+            content = content.replace("$name", name);
+            content = content.replace("$link", link);
+            return content;
+        } catch (IOException e) {
+            return "";
+        }
     }
 }
