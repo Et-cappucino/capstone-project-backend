@@ -3,6 +3,7 @@ package com.aua.movie.service.impl;
 import com.aua.movie.model.EmailConfirmationToken;
 import com.aua.movie.model.Profile;
 import com.aua.movie.repository.EmailConfirmationTokenRepository;
+import com.aua.movie.repository.ProfileRepository;
 import com.aua.movie.service.EmailConfirmationTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class EmailConfirmationTokenServiceImpl implements EmailConfirmationTokenService {
 
+    private final ProfileRepository profileRepository;
     private final EmailConfirmationTokenRepository emailConfirmationTokenRepository;
 
     @Value("${email.confirmation.token.expiration.time.minutes}")
@@ -50,9 +52,14 @@ public class EmailConfirmationTokenServiceImpl implements EmailConfirmationToken
         }
 
         setConfirmedAt(token);
+        enableProfile(confirmationToken.getProfile().getEmail());
     }
 
     private void setConfirmedAt(String token) {
         emailConfirmationTokenRepository.updateConfirmedAt(token, LocalDateTime.now());
+    }
+
+    private void enableProfile(String email) {
+        profileRepository.enableProfile(email);
     }
 }

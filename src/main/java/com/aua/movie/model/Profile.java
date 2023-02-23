@@ -40,6 +40,9 @@ public class Profile {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
+    @Column(name = "is_enabled")
+    private boolean enabled = false;
+
     @ManyToMany
     @JoinTable(
             name = "watchlist",

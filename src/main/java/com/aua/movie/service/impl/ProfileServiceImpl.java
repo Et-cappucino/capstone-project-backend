@@ -2,9 +2,11 @@ package com.aua.movie.service.impl;
 
 import com.aua.movie.dto.ProfileDto;
 import com.aua.movie.mapper.ProfileMapper;
+import com.aua.movie.model.EmailConfirmationToken;
 import com.aua.movie.model.Profile;
 import com.aua.movie.model.enums.Role;
 import com.aua.movie.repository.ProfileRepository;
+import com.aua.movie.service.EmailConfirmationTokenService;
 import com.aua.movie.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,6 +33,7 @@ public class ProfileServiceImpl implements ProfileService, UserDetailsService {
     private final ProfileRepository profileRepository;
     private final ProfileMapper profileMapper;
     private final PasswordEncoder passwordEncoder;
+    private final EmailConfirmationTokenService emailConfirmationTokenService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -62,6 +65,10 @@ public class ProfileServiceImpl implements ProfileService, UserDetailsService {
         Profile profile = profileMapper.profileDtoToProfile(profileDto);
         profile.setPassword(passwordEncoder.encode(profile.getPassword()));
         profileRepository.save(profile);
+
+        EmailConfirmationToken confirmationToken = emailConfirmationTokenService.generateToken(profile);
+        emailConfirmationTokenService.saveEmailConfirmationToken(confirmationToken);
+
         return profileMapper.profileToProfileDto(profile);
     }
 
@@ -92,6 +99,7 @@ public class ProfileServiceImpl implements ProfileService, UserDetailsService {
         current.setEmail(updated.getEmail());
         current.setPassword(updated.getPassword());
         current.setAdmin(updated.isAdmin());
+        current.setEnabled(updated.isEnabled());
         current.setWatchlist(updated.getWatchlist());
         current.setFavorites(updated.getFavorites());
         return current;
