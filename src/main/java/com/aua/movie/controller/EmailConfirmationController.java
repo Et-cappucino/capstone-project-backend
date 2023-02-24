@@ -22,6 +22,6 @@ public class EmailConfirmationController {
     @GetMapping("/confirm")
     public String confirm(@RequestParam String token) {
         emailConfirmationTokenService.confirmToken(token);
-        return "confirm";
+        return "email-confirmed";
     }
 }
