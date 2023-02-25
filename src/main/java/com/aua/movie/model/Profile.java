@@ -31,7 +31,7 @@ public class Profile {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password")
@@ -39,6 +39,9 @@ public class Profile {
 
     @Column(name = "is_admin")
     private boolean isAdmin;
+
+    @Column(name = "is_enabled")
+    private boolean enabled = false;
 
     @ManyToMany
     @JoinTable(
