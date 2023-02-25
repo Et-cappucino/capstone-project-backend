@@ -107,6 +107,7 @@ public class ProfileServiceImpl implements ProfileService, UserDetailsService {
         current.setEnabled(updated.isEnabled());
         current.setWatchlist(updated.getWatchlist());
         current.setFavorites(updated.getFavorites());
+        current.setFavoriteGenres(updated.getFavoriteGenres());
         return current;
     }
 }
