@@ -31,6 +31,9 @@ public class MailSenderServiceImpl implements MailSenderService {
     @Value("${email.confirmation.token.expiration.time.minutes}")
     private long expirationTime;
 
+    @Value("${email.confirmation.token.link}")
+    private String confirmationLinkBase;
+
     @Override
     @Async
     public void send(String to, String email) {
@@ -48,12 +51,12 @@ public class MailSenderServiceImpl implements MailSenderService {
     }
 
     @Override
-    public String buildMail(String name, String link) {
+    public String buildMail(String name, String token) {
         Resource resource = resourceLoader.getResource("classpath:static/view/confirmation-email.html");
         try {
             String content = new String(Files.readAllBytes(resource.getFile().toPath()));
             content = content.replace("$name", name);
-            content = content.replace("$link", link);
+            content = content.replace("$link", confirmationLinkBase + token);
             return content;
         } catch (IOException e) {
             return "";

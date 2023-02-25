@@ -10,7 +10,6 @@ import com.aua.movie.service.EmailConfirmationTokenService;
 import com.aua.movie.service.MailSenderService;
 import com.aua.movie.service.ProfileService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -37,9 +36,6 @@ public class ProfileServiceImpl implements ProfileService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final EmailConfirmationTokenService emailConfirmationTokenService;
     private final MailSenderService emailSenderService;
-
-    @Value("${email.confirmation.token.link}")
-    private String confirmationLinkBase;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -75,7 +71,7 @@ public class ProfileServiceImpl implements ProfileService, UserDetailsService {
         EmailConfirmationToken confirmationToken = emailConfirmationTokenService.generateToken(profile);
         emailConfirmationTokenService.saveEmailConfirmationToken(confirmationToken);
 
-        String mail = emailSenderService.buildMail(profile.getFirstName(), confirmationLinkBase + confirmationToken.getToken());
+        String mail = emailSenderService.buildMail(profile.getFirstName(), confirmationToken.getToken());
         emailSenderService.send(profile.getEmail(), mail);
 
         return profileMapper.profileToProfileDto(profile);
