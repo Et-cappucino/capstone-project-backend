@@ -18,4 +18,6 @@ public interface ProfileService {
     void deleteProfile(Long id);
 
     Profile getProfileByEmail(String email);
+
+    ProfileDto findProfileByEmail(String email);
 }
