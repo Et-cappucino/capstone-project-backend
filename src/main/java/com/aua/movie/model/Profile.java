@@ -16,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import java.util.List;
 import java.util.Set;
@@ -47,6 +49,10 @@ public class Profile {
 
     @Column(name = "is_enabled")
     private boolean enabled = false;
+
+    @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @PrimaryKeyJoinColumn
+    private ProfilePicture profilePicture;
 
     @ManyToMany
     @JoinTable(
