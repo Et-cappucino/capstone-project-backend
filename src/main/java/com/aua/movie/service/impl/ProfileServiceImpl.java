@@ -98,6 +98,13 @@ public class ProfileServiceImpl implements ProfileService, UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
+    @Override
+    public ProfileDto findProfileByEmail(String email) {
+        Profile profile = profileRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return profileMapper.profileToProfileDto(profile);
+    }
+
     private Profile update(Profile current, Profile updated) {
         current.setFirstName(updated.getFirstName());
         current.setLastName(updated.getLastName());
@@ -107,6 +114,7 @@ public class ProfileServiceImpl implements ProfileService, UserDetailsService {
         current.setEnabled(updated.isEnabled());
         current.setWatchlist(updated.getWatchlist());
         current.setFavorites(updated.getFavorites());
+        current.setFavoriteGenres(updated.getFavoriteGenres());
         return current;
     }
 }

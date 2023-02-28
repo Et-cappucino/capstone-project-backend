@@ -53,6 +53,11 @@ public class WatchableDto {
     @NotNull
     private double rating;
 
+    @ApiModelProperty(value = "Number of votes of the watchable")
+    @Min(value = 0)
+    @Positive
+    private int voteCount;
+
     @ApiModelProperty(value = "Duration of the watchable")
     @Positive
     @NotNull
