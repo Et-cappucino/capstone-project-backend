@@ -49,6 +49,9 @@ public class Watchable {
     @Column(name = "rating", nullable = false)
     private double rating;
 
+    @Column(name = "vote_count", nullable = false)
+    private int voteCount;
+
     @Column(name = "duration", nullable = false)
     private int duration;
 
