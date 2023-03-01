@@ -18,22 +18,21 @@ public class FavoriteGenresServiceImpl implements FavoriteGenresService {
     private final ProfileRepository profileRepository;
 
     @Override
-    public void addToFavoriteGenres(Genre genre, Long profileId) {
+    public void addToFavoriteGenres(Set<Genre> genres, Long profileId) {
         Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        Set<Genre> favoriteGenres = profile.getFavoriteGenres();
-        favoriteGenres.add(genre);
+        profile.setFavoriteGenres(genres);
         profileRepository.save(profile);
     }
 
     @Override
-    public void removeFromFavoriteGenres(Genre genre, Long profileId) {
+    public void removeFromFavoriteGenres(Set<Genre> genres, Long profileId) {
         Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         Set<Genre> favoriteGenres = profile.getFavoriteGenres();
-        favoriteGenres.remove(genre);
+        favoriteGenres.removeAll(genres);
+        profile.setFavoriteGenres(favoriteGenres);
         profileRepository.save(profile);
     }
 
