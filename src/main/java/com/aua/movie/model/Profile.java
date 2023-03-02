@@ -54,6 +54,10 @@ public class Profile {
     @PrimaryKeyJoinColumn
     private ProfilePicture profilePicture;
 
+    @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @PrimaryKeyJoinColumn
+    private EmailConfirmationToken emailConfirmationToken;
+
     @ManyToMany
     @JoinTable(
             name = "watchlist",
