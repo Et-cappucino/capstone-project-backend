@@ -8,10 +8,15 @@ import com.aua.movie.repository.ProfileRepository;
 import com.aua.movie.repository.WatchableRepository;
 import com.aua.movie.service.FavoriteWatchablesService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,12 +57,26 @@ public class FavoriteWatchablesServiceImpl implements FavoriteWatchablesService 
     }
 
     @Override
-    public List<WatchableDto> getProfileFavorites(Long profileId) {
+    public Page<WatchableDto> getProfileFavorites(Long profileId, Pageable pageRequest) {
         Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return profile.getFavorites()
+        List<WatchableDto> favorites = profile.getFavorites()
                 .stream()
                 .map(watchableMapper::watchableToWatchableDto)
                 .collect(Collectors.toList());
+        return listToPage(favorites, pageRequest.getPageNumber(), pageRequest.getPageSize());
+    }
+
+    private Page<WatchableDto> listToPage(List<WatchableDto> favorites, int pageNumber, int pageSize) {
+        int totalElements = favorites.size();
+        int totalPages = (int) Math.ceil((double) totalElements / pageSize);
+
+        if (pageNumber >= totalPages) {
+            return new PageImpl<>(Collections.emptyList(), PageRequest.of(pageNumber, pageSize), totalElements);
+        }
+
+        int fromIndex = pageNumber * pageSize;
+        int toIndex = Math.min(fromIndex + pageSize, totalElements);
+        return new PageImpl<>(favorites.subList(fromIndex, toIndex), PageRequest.of(pageNumber, pageSize), totalElements);
     }
 }

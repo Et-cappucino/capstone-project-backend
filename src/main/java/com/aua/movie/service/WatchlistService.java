@@ -1,8 +1,8 @@
 package com.aua.movie.service;
 
 import com.aua.movie.dto.WatchableDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface WatchlistService {
 
@@ -10,5 +10,5 @@ public interface WatchlistService {
 
     void removeFromWatchlist(Long watchableId, Long profileId);
 
-    List<WatchableDto> getProfileWatchlist(Long profileId);
+    Page<WatchableDto> getProfileWatchlist(Long profileId, Pageable pageRequest);
 }
