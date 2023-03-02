@@ -80,4 +80,12 @@ public class ProfileController {
         profileService.deleteProfile(id);
         return ResponseEntity.ok().build();
     }
+
+    @ApiOperation(value = "Check if Profile's email is confirmed or not", tags = "profile-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
+    @GetMapping("/verification/{profileId}")
+    public ResponseEntity<Boolean> isProfileEmailConfirmed(@PathVariable Long profileId) {
+        Boolean body = profileService.isProfileEnabled(profileId);
+        return ResponseEntity.ok(body);
+    }
 }

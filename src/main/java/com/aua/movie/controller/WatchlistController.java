@@ -7,15 +7,16 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @Api(value = "Watchlist service rest API")
 @RestController
@@ -41,11 +42,13 @@ public class WatchlistController {
         return ResponseEntity.ok().build();
     }
 
-    @ApiOperation(value = "Get a Profile's Watchlist by ID", tags = "watchlist-controller")
+    @ApiOperation(value = "Get a Profile's Watchlist by ID with pagination support", tags = "watchlist-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @GetMapping("/{profileId}")
-    public ResponseEntity<List<WatchableDto>> getProfileWatchlist(@PathVariable Long profileId) {
-        List<WatchableDto> body = watchlistService.getProfileWatchlist(profileId);
+    public ResponseEntity<Page<WatchableDto>> getProfileWatchlist(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+                                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize,
+                                                                  @PathVariable Long profileId) {
+        Page<WatchableDto> body = watchlistService.getProfileWatchlist(profileId, PageRequest.of(pageNumber, pageSize));
         return ResponseEntity.ok(body);
     }
 }

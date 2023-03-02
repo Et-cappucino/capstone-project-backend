@@ -6,9 +6,9 @@ import java.util.Set;
 
 public interface FavoriteGenresService {
 
-    void addToFavoriteGenres(Genre genre, Long profileId);
+    void addToFavoriteGenres(Set<Genre> genres, Long profileId);
 
-    void removeFromFavoriteGenres(Genre genre, Long profileId);
+    void removeFromFavoriteGenres(Set<Genre> genres, Long profileId);
 
     Set<Genre> getProfileFavoriteGenres(Long profileId);
 }

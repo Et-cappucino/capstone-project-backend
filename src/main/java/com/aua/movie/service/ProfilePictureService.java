@@ -9,7 +9,5 @@ public interface ProfilePictureService {
 
     ProfilePictureDto getProfilePicture(Long id);
 
-    ProfilePictureDto addProfilePicture(MultipartFile imageFile, Long profileId) throws IOException;
-
-    ProfilePictureDto updateProfilePicture(MultipartFile imageFile, Long id) throws IOException;
+    ProfilePictureDto uploadProfilePicture(MultipartFile imageFile, Long id) throws IOException;
 }

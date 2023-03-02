@@ -20,4 +20,6 @@ public interface ProfileService {
     Profile getProfileByEmail(String email);
 
     ProfileDto findProfileByEmail(String email);
+
+    boolean isProfileEnabled(Long profileId);
 }

@@ -105,6 +105,14 @@ public class ProfileServiceImpl implements ProfileService, UserDetailsService {
         return profileMapper.profileToProfileDto(profile);
     }
 
+    @Override
+    public boolean isProfileEnabled(Long profileId) {
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        return profile.isEnabled();
+    }
+
     private Profile update(Profile current, Profile updated) {
         current.setFirstName(updated.getFirstName());
         current.setLastName(updated.getLastName());

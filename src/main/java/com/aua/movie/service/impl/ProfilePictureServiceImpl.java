@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
@@ -37,31 +38,27 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
     }
 
     @Override
-    public ProfilePictureDto addProfilePicture(MultipartFile imageFile, Long profileId) throws IOException {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public ProfilePictureDto uploadProfilePicture(MultipartFile imageFile, Long id) throws IOException {
+        Optional<ProfilePicture> profilePictureOptional = profilePictureRepository.findById(id);
+        ProfilePicture profilePicture;
 
-        ProfilePicture profilePicture = ProfilePicture.builder()
-                .name(imageFile.getOriginalFilename()
-                        .substring(0, imageFile.getOriginalFilename().lastIndexOf(".")))
-                .type(imageFile.getContentType())
-                .imageData(compressImage(imageFile.getBytes()))
-                .uploadedAt(LocalDateTime.now())
-                .profile(profile)
-                .build();
+        if (profilePictureOptional.isPresent()) {
+            profilePicture = update(profilePictureOptional.get(), imageFile);
+        } else {
+            Profile profile = profileRepository.findById(id)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
+            profilePicture = ProfilePicture.builder()
+                    .name(imageFile.getOriginalFilename()
+                            .substring(0, imageFile.getOriginalFilename().lastIndexOf(".")))
+                    .type(imageFile.getContentType())
+                    .imageData(compressImage(imageFile.getBytes()))
+                    .uploadedAt(LocalDateTime.now())
+                    .profile(profile)
+                    .build();
+        }
         profilePictureRepository.save(profilePicture);
         return profilePictureMapper.profilePictureToProfilePictureDto(profilePicture);
-    }
-
-    @Override
-    public ProfilePictureDto updateProfilePicture(MultipartFile imageFile, Long id) throws IOException {
-        ProfilePicture profilePicture = profilePictureRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        ProfilePicture updatedProfilePicture = update(profilePicture, imageFile);
-
-        profilePictureRepository.save(updatedProfilePicture);
-        return profilePictureMapper.profilePictureToProfilePictureDto(updatedProfilePicture);
     }
 
     private ProfilePicture update(ProfilePicture current, MultipartFile updatedImageFile) throws IOException {

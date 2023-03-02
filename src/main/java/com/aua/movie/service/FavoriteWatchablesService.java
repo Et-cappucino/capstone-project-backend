@@ -1,8 +1,8 @@
 package com.aua.movie.service;
 
 import com.aua.movie.dto.WatchableDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface FavoriteWatchablesService {
 
@@ -10,5 +10,5 @@ public interface FavoriteWatchablesService {
 
     void removeFromFavorites(Long watchableId, Long profileId);
 
-    List<WatchableDto> getProfileFavorites(Long profileId);
+    Page<WatchableDto> getProfileFavorites(Long profileId, Pageable pageRequest);
 }
