@@ -75,6 +75,9 @@ public class Profile {
     @OneToMany(mappedBy = "commenter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SearchRecord> searches;
+
     @ElementCollection(targetClass = Genre.class)
     @JoinTable(name = "favorite_genres", joinColumns = @JoinColumn(name = "profile_id"))
     @Column(name = "genre", nullable = false)
