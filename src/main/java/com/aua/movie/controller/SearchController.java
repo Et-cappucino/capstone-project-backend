@@ -38,6 +38,18 @@ public class SearchController {
         return ResponseEntity.ok(body);
     }
 
+    @ApiOperation(value = "Get watchables by search with pagination and sorting support when Logged In", tags = "search-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
+    @GetMapping("/userSearch")
+    public ResponseEntity<Page<WatchableDto>> userSearchWatchables(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+                                                               @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize,
+                                                               @RequestParam(name = "sort", defaultValue = "rating") String sort,
+                                                               @RequestParam(value = "query", required = false) String query,
+                                                               @RequestParam(value = "email") String profileEmail) {
+        Page<WatchableDto> body = searchService.userSearchWatchable(query, PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, sort)), profileEmail);
+        return ResponseEntity.ok(body);
+    }
+
     @ApiOperation(value = "Get watchables by Genre search with pagination and sorting support", tags = "search-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @GetMapping("/genre")

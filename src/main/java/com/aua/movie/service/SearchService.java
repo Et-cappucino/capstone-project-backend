@@ -9,6 +9,8 @@ public interface SearchService {
 
     Page<WatchableDto> searchWatchable(String query, Pageable pageRequest);
 
+    Page<WatchableDto> userSearchWatchable(String query, Pageable pageRequest, String profileEmail);
+
     Page<WatchableDto> searchWatchableByGenre(Genre genre, Pageable pageRequest);
 
     Page<WatchableDto> searchWatchableByReleaseYear(Integer releaseYear, Pageable pageRequest);
