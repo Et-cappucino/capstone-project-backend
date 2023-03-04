@@ -39,10 +39,8 @@ public class ProfileDto {
     private String password;
 
     @ApiModelProperty(value = "Is the user an admin or not")
-    @NotNull
     private boolean isAdmin;
 
     @ApiModelProperty(value = "Is the user account enabled or not")
-    @NotNull
     private boolean enabled;
 }

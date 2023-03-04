@@ -117,13 +117,10 @@ public class ProfileServiceImpl implements ProfileService, UserDetailsService {
         current.setFirstName(updated.getFirstName());
         current.setLastName(updated.getLastName());
         current.setEmail(updated.getEmail());
-        current.setPassword(updated.getPassword());
+        current.setPassword(passwordEncoder.encode(updated.getPassword()));
         current.setAdmin(updated.isAdmin());
-        current.setEnabled(updated.isEnabled());
         current.setWatchlist(updated.getWatchlist());
         current.setFavorites(updated.getFavorites());
-        current.setComments(updated.getComments());
-        current.setSearches(updated.getSearches());
         current.setFavoriteGenres(updated.getFavoriteGenres());
         return current;
     }
