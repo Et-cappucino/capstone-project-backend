@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -38,8 +39,8 @@ public class FavoriteGenresController {
     @ApiOperation(value = "Remove Genre(s) from the Profile's Favorite Genres", tags = "favorite-genres-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @DeleteMapping("/{profileId}")
-    public ResponseEntity<Void> removeFromFavoriteGenres(@RequestBody @Valid Set<Genre> genres, @PathVariable Long profileId) {
-        favoriteGenresService.removeFromFavoriteGenres(genres, profileId);
+    public ResponseEntity<Void> removeFromFavoriteGenres(@RequestParam(value = "genre") Genre genre, @PathVariable Long profileId) {
+        favoriteGenresService.removeFromFavoriteGenres(genre, profileId);
         return ResponseEntity.ok().build();
     }
 

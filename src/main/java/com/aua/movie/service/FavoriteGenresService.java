@@ -8,7 +8,7 @@ public interface FavoriteGenresService {
 
     void addToFavoriteGenres(Set<Genre> genres, Long profileId);
 
-    void removeFromFavoriteGenres(Set<Genre> genres, Long profileId);
+    void removeFromFavoriteGenres(Genre genre, Long profileId);
 
     Set<Genre> getProfileFavoriteGenres(Long profileId);
 }
