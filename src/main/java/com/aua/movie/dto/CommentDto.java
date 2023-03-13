@@ -38,4 +38,7 @@ public class CommentDto {
 
     @ApiModelProperty(value = "The exact time the comment was posted")
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @ApiModelProperty(value = "Full name of the author of the comment")
+    private String commenterFullName;
 }

@@ -27,6 +27,7 @@ public abstract class CommentMapper {
                 .text(comment.getText())
                 .commenterId(comment.getCommenter().getId())
                 .watchableId(comment.getWatchable().getId())
+                .commenterFullName(comment.getCommenter().getFirstName() + " " + comment.getCommenter().getLastName())
                 .build();
     }
 
