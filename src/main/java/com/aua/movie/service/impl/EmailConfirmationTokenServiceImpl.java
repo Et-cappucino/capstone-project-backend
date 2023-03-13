@@ -10,11 +10,14 @@ import com.aua.movie.repository.ProfileRepository;
 import com.aua.movie.service.EmailConfirmationTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@EnableScheduling
 @Service
 @RequiredArgsConstructor
 public class EmailConfirmationTokenServiceImpl implements EmailConfirmationTokenService {
@@ -57,8 +60,6 @@ public class EmailConfirmationTokenServiceImpl implements EmailConfirmationToken
 
         LocalDateTime expiresAt = confirmationToken.getExpiresAt();
         if (expiresAt.isBefore(LocalDateTime.now())) {
-            emailConfirmationTokenRepository.delete(confirmationToken);
-            profileRepository.deleteById(confirmationToken.getProfile().getId());
             throw new ConfirmationTokenExpiredException("Confirmation Token " + token + " has already expired");
         }
         return confirmationToken;
@@ -70,5 +71,14 @@ public class EmailConfirmationTokenServiceImpl implements EmailConfirmationToken
 
     private void enableProfile(String email) {
         profileRepository.enableProfile(email);
+    }
+
+    @Scheduled(initialDelayString = "${email.confirmation.token.cleanup.fixed.rate}", fixedRateString = "${email.confirmation.token.cleanup.fixed.rate}")
+    private void cleanupUnconfirmedProfiles() {
+        emailConfirmationTokenRepository.findByConfirmedAtIsNullAndExpiresAtBefore(LocalDateTime.now())
+                .forEach(token -> {
+                    emailConfirmationTokenRepository.delete(token);
+                    profileRepository.delete(token.getProfile());
+                });
     }
 }
