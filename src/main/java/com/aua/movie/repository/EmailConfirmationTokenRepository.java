@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,6 +16,8 @@ import java.util.Optional;
 public interface EmailConfirmationTokenRepository extends JpaRepository<EmailConfirmationToken, Long> {
 
     Optional<EmailConfirmationToken> findByToken(String token);
+
+    List<EmailConfirmationToken> findByConfirmedAtIsNullAndExpiresAtBefore(LocalDateTime now);
 
     @Transactional
     @Modifying
