@@ -1,6 +1,5 @@
 package com.aua.movie.controller;
 
-import com.aua.movie.dto.ProfileDto;
 import com.aua.movie.dto.ProfilePictureDto;
 import com.aua.movie.service.ProfilePictureService;
 import io.swagger.annotations.Api;
@@ -29,7 +28,7 @@ public class ProfilePictureController {
 
     private final ProfilePictureService profilePictureService;
 
-    @ApiOperation(value = "Upload a Profile picture", response = ProfileDto.class, tags = "profile-picture-controller")
+    @ApiOperation(value = "Upload a Profile picture", response = ProfilePictureDto.class, tags = "profile-picture-controller")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @PostMapping("/{id}")
     public ResponseEntity<ProfilePictureDto> uploadProfilePicture(@RequestParam("image") MultipartFile imageFile, @PathVariable Long id) throws IOException {
