@@ -83,4 +83,7 @@ public class Profile {
     @Column(name = "genre", nullable = false)
     @Enumerated(EnumType.STRING)
     private Set<Genre> favoriteGenres;
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rate> rates;
 }

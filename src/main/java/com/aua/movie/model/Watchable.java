@@ -81,4 +81,7 @@ public class Watchable {
 
     @OneToMany(mappedBy = "watchable", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "watchable", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rate> rates;
 }
