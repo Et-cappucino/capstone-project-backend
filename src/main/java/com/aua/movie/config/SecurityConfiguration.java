@@ -65,6 +65,7 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.GET, "/api/filter/**")
                 .antMatchers(HttpMethod.GET, "/api/search/**")
                 .antMatchers(HttpMethod.GET, "/api/images/**")
+                .antMatchers(HttpMethod.GET, "/api/recommend/**")
                 .antMatchers(HttpMethod.POST, "/api/profiles")
                 .antMatchers("/v2/api-docs/**",
                 "/configuration/ui",
