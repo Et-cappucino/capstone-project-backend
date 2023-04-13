@@ -2,8 +2,11 @@ package com.aua.movie.controller;
 
 import com.aua.movie.dto.WatchableDto;
 import com.aua.movie.service.RecommendationService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-
+@Api(value = "Recommendation service rest API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/recommend")
@@ -22,19 +23,14 @@ public class RecommendationController {
 
     private final RecommendationService recommendationService;
 
-    @Value("${python.recommendation.endpoint.url}")
-    private String recommendationUrl;
-
+    @ApiOperation(value = "Get particular number of recommended Watchables with pagination support", tags = "recommendation-controller")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request")})
     @GetMapping
     public ResponseEntity<Page<WatchableDto>> recommendWatchables(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
-                                                        @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize,
-                                                        @RequestParam(value = "number", required = false, defaultValue = "1") Integer number) {
-        RestTemplate restTemplate = new RestTemplate();
-        Integer[] ids = restTemplate.getForObject(recommendationUrl + "?number=" + number, Integer[].class);
-        Page<WatchableDto> body = null;
-        if (ids != null) {
-            body = recommendationService.findAllRecommended(Arrays.asList(ids), PageRequest.of(pageNumber,pageSize));
-        }
+                                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize,
+                                                                  @RequestParam(value = "number", required = false, defaultValue = "1") Integer number,
+                                                                  @RequestParam(value = "profileId") Long profileId) {
+        Page<WatchableDto> body = recommendationService.findAllRecommended(number, profileId, PageRequest.of(pageNumber,pageSize));
         return ResponseEntity.ok(body);
     }
 }
