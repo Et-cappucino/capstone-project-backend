@@ -3,9 +3,8 @@ package com.aua.movie.service.impl;
 
 import com.aua.movie.dto.WatchableDto;
 import com.aua.movie.mapper.WatchableMapper;
-import com.aua.movie.model.Profile;
+import com.aua.movie.model.Watchable;
 import com.aua.movie.model.enums.Genre;
-import com.aua.movie.repository.ProfileRepository;
 import com.aua.movie.repository.WatchableRepository;
 import com.aua.movie.service.RecommendationService;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +26,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class RecommendationServiceImpl implements RecommendationService {
 
-    private final ProfileRepository profileRepository;
     private final WatchableRepository watchableRepository;
     private final WatchableMapper watchableMapper;
 
@@ -51,11 +48,11 @@ public class RecommendationServiceImpl implements RecommendationService {
         return listToPage(watchableDtoList, pageRequest.getPageNumber(), pageRequest.getPageSize());
     }
 
-    private List<Long> getRecommendedWatchableIds(Integer number, Long profileId) {
-        Profile profile = profileRepository.findById(profileId)
+    private List<Long> getRecommendedWatchableIds(Integer number, Long watchableId) {
+        Watchable watchable = watchableRepository.findById(watchableId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         RestTemplate restTemplate = new RestTemplate();
-        Integer[] ids = restTemplate.postForObject(url, payload(number, profile.getFavoriteGenres()), Integer[].class);
+        Integer[] ids = restTemplate.postForObject(url, payload(number, watchable.getGenres()), Integer[].class);
         List<Integer> idsAsList = Arrays.asList(Objects.requireNonNull(ids));
         return idsAsList.stream()
                 .mapToLong(Integer::longValue)
@@ -63,7 +60,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .collect(Collectors.toList());
     }
 
-    private HttpEntity<Map<String, Object>> payload(Integer number, Set<Genre> genres) {
+    private HttpEntity<Map<String, Object>> payload(Integer number, List<Genre> genres) {
         Map<String, Object> requestBody = Map.of("number", number, "genres", genres);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

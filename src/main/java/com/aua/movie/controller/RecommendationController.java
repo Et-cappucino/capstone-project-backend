@@ -29,8 +29,8 @@ public class RecommendationController {
     public ResponseEntity<Page<WatchableDto>> recommendWatchables(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
                                                                   @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize,
                                                                   @RequestParam(value = "number", required = false, defaultValue = "1") Integer number,
-                                                                  @RequestParam(value = "profileId") Long profileId) {
-        Page<WatchableDto> body = recommendationService.findAllRecommended(number, profileId, PageRequest.of(pageNumber,pageSize));
+                                                                  @RequestParam(value = "watchableId") Long watchableId) {
+        Page<WatchableDto> body = recommendationService.findAllRecommended(number, watchableId, PageRequest.of(pageNumber,pageSize));
         return ResponseEntity.ok(body);
     }
 }
