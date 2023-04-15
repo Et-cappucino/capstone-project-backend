@@ -1,6 +1,7 @@
 package com.aua.movie.service.impl;
 
 
+import com.aua.movie.config.PageableHelper;
 import com.aua.movie.dto.WatchableDto;
 import com.aua.movie.mapper.WatchableMapper;
 import com.aua.movie.model.Watchable;
@@ -10,8 +11,6 @@ import com.aua.movie.service.RecommendationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -34,6 +32,7 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     private final WatchableRepository watchableRepository;
     private final WatchableMapper watchableMapper;
+    private final PageableHelper pageableHelper;
 
     @Value("${python.recommendation.endpoint.url}")
     private String url;
@@ -45,7 +44,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .stream()
                 .map(watchableMapper::watchableToWatchableDto)
                 .collect(Collectors.toList());
-        return listToPage(watchableDtoList, pageRequest.getPageNumber(), pageRequest.getPageSize());
+        return pageableHelper.listToPage(watchableDtoList, pageRequest.getPageNumber(), pageRequest.getPageSize());
     }
 
     private List<Long> getRecommendedWatchableIds(Integer number, Long watchableId) {
@@ -65,18 +64,5 @@ public class RecommendationServiceImpl implements RecommendationService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity<>(requestBody, headers);
-    }
-
-    private Page<WatchableDto> listToPage(List<WatchableDto> recommendations, int pageNumber, int pageSize) {
-        int totalElements = recommendations.size();
-        int totalPages = (int) Math.ceil((double) totalElements / pageSize);
-
-        if (pageNumber >= totalPages) {
-            return new PageImpl<>(Collections.emptyList(), PageRequest.of(pageNumber, pageSize), totalElements);
-        }
-
-        int fromIndex = pageNumber * pageSize;
-        int toIndex = Math.min(fromIndex + pageSize, totalElements);
-        return new PageImpl<>(recommendations.subList(fromIndex, toIndex), PageRequest.of(pageNumber, pageSize), totalElements);
     }
 }
