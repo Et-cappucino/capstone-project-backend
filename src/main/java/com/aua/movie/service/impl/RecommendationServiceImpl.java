@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.aua.movie.model.enums.RecommendationType.GENRE_BASED;
+
 @Service
 @RequiredArgsConstructor
 public class RecommendationServiceImpl implements RecommendationService {
@@ -52,7 +54,8 @@ public class RecommendationServiceImpl implements RecommendationService {
         Watchable watchable = watchableRepository.findById(watchableId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         RestTemplate restTemplate = new RestTemplate();
-        Integer[] ids = restTemplate.postForObject(url, payload(watchable.getGenres()), Integer[].class);
+        Object request = (type == GENRE_BASED) ? payload(watchable.getGenres()) : payload(watchable.getName());
+        Integer[] ids = restTemplate.postForObject(url + type.getPath(), request, Integer[].class);
         List<Integer> idsAsList = Arrays.asList(Objects.requireNonNull(ids));
         return idsAsList.stream()
                 .mapToLong(Integer::longValue)
@@ -62,6 +65,13 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     private HttpEntity<Map<String, Object>> payload(List<Genre> genres) {
         Map<String, Object> requestBody = Map.of("genres", genres);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new HttpEntity<>(requestBody, headers);
+    }
+
+    private HttpEntity<Map<String, Object>> payload(String title) {
+        Map<String, Object> requestBody = Map.of("title", title);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity<>(requestBody, headers);
