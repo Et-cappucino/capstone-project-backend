@@ -38,8 +38,8 @@ public class RecommendationServiceImpl implements RecommendationService {
     private String url;
 
     @Override
-    public Page<WatchableDto> findAllRecommended(Integer number, Long profileId, Pageable pageRequest) {
-        List<Long> ids = getRecommendedWatchableIds(number, profileId);
+    public Page<WatchableDto> findAllRecommended(Long watchableId, Pageable pageRequest) {
+        List<Long> ids = getRecommendedWatchableIds(watchableId);
         List<WatchableDto> watchableDtoList = watchableRepository.findAllById(ids)
                 .stream()
                 .map(watchableMapper::watchableToWatchableDto)
@@ -47,11 +47,11 @@ public class RecommendationServiceImpl implements RecommendationService {
         return pageableHelper.listToPage(watchableDtoList, pageRequest.getPageNumber(), pageRequest.getPageSize());
     }
 
-    private List<Long> getRecommendedWatchableIds(Integer number, Long watchableId) {
+    private List<Long> getRecommendedWatchableIds(Long watchableId) {
         Watchable watchable = watchableRepository.findById(watchableId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         RestTemplate restTemplate = new RestTemplate();
-        Integer[] ids = restTemplate.postForObject(url, payload(number, watchable.getGenres()), Integer[].class);
+        Integer[] ids = restTemplate.postForObject(url, payload(watchable.getGenres()), Integer[].class);
         List<Integer> idsAsList = Arrays.asList(Objects.requireNonNull(ids));
         return idsAsList.stream()
                 .mapToLong(Integer::longValue)
@@ -59,8 +59,8 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .collect(Collectors.toList());
     }
 
-    private HttpEntity<Map<String, Object>> payload(Integer number, List<Genre> genres) {
-        Map<String, Object> requestBody = Map.of("number", number, "genres", genres);
+    private HttpEntity<Map<String, Object>> payload(List<Genre> genres) {
+        Map<String, Object> requestBody = Map.of("genres", genres);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity<>(requestBody, headers);

@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface RecommendationService {
 
-    Page<WatchableDto> findAllRecommended(Integer number, Long watchableId, Pageable pageRequest);
+    Page<WatchableDto> findAllRecommended(Long watchableId, Pageable pageRequest);
 }
