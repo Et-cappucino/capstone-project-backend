@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.aua.movie.model.enums.RecommendationType.GENRE_BASED;
+
 @Api(value = "Recommendation service rest API")
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class RecommendationController {
     public ResponseEntity<Page<WatchableDto>> recommendWatchablesBasedOnGenre(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
                                                                               @RequestParam(value = "pageSize", required = false, defaultValue = "5") Integer pageSize,
                                                                               @RequestParam(value = "watchableId") Long watchableId) {
-        Page<WatchableDto> body = recommendationService.findAllRecommended(watchableId, PageRequest.of(pageNumber,pageSize));
+        Page<WatchableDto> body = recommendationService.findAllRecommended(GENRE_BASED, watchableId, PageRequest.of(pageNumber,pageSize));
         return ResponseEntity.ok(body);
     }
 }

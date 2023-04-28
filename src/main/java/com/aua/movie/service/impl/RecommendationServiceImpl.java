@@ -6,6 +6,7 @@ import com.aua.movie.dto.WatchableDto;
 import com.aua.movie.mapper.WatchableMapper;
 import com.aua.movie.model.Watchable;
 import com.aua.movie.model.enums.Genre;
+import com.aua.movie.model.enums.RecommendationType;
 import com.aua.movie.repository.WatchableRepository;
 import com.aua.movie.service.RecommendationService;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +39,8 @@ public class RecommendationServiceImpl implements RecommendationService {
     private String url;
 
     @Override
-    public Page<WatchableDto> findAllRecommended(Long watchableId, Pageable pageRequest) {
-        List<Long> ids = getRecommendedWatchableIds(watchableId);
+    public Page<WatchableDto> findAllRecommended(RecommendationType type, Long watchableId, Pageable pageRequest) {
+        List<Long> ids = getRecommendedWatchableIds(type, watchableId);
         List<WatchableDto> watchableDtoList = watchableRepository.findAllById(ids)
                 .stream()
                 .map(watchableMapper::watchableToWatchableDto)
@@ -47,7 +48,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         return pageableHelper.listToPage(watchableDtoList, pageRequest.getPageNumber(), pageRequest.getPageSize());
     }
 
-    private List<Long> getRecommendedWatchableIds(Long watchableId) {
+    private List<Long> getRecommendedWatchableIds(RecommendationType type, Long watchableId) {
         Watchable watchable = watchableRepository.findById(watchableId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         RestTemplate restTemplate = new RestTemplate();
