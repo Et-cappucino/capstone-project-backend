@@ -6,6 +6,7 @@ import com.aua.movie.dto.WatchableDto;
 import com.aua.movie.mapper.WatchableMapper;
 import com.aua.movie.model.Watchable;
 import com.aua.movie.model.enums.Genre;
+import com.aua.movie.model.enums.RecommendationType;
 import com.aua.movie.repository.WatchableRepository;
 import com.aua.movie.service.RecommendationService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.aua.movie.model.enums.RecommendationType.GENRE_BASED;
+
 @Service
 @RequiredArgsConstructor
 public class RecommendationServiceImpl implements RecommendationService {
@@ -38,8 +41,8 @@ public class RecommendationServiceImpl implements RecommendationService {
     private String url;
 
     @Override
-    public Page<WatchableDto> findAllRecommended(Integer number, Long profileId, Pageable pageRequest) {
-        List<Long> ids = getRecommendedWatchableIds(number, profileId);
+    public Page<WatchableDto> findAllRecommended(RecommendationType type, Long watchableId, Pageable pageRequest) {
+        List<Long> ids = getRecommendedWatchableIds(type, watchableId);
         List<WatchableDto> watchableDtoList = watchableRepository.findAllById(ids)
                 .stream()
                 .map(watchableMapper::watchableToWatchableDto)
@@ -47,11 +50,12 @@ public class RecommendationServiceImpl implements RecommendationService {
         return pageableHelper.listToPage(watchableDtoList, pageRequest.getPageNumber(), pageRequest.getPageSize());
     }
 
-    private List<Long> getRecommendedWatchableIds(Integer number, Long watchableId) {
+    private List<Long> getRecommendedWatchableIds(RecommendationType type, Long watchableId) {
         Watchable watchable = watchableRepository.findById(watchableId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         RestTemplate restTemplate = new RestTemplate();
-        Integer[] ids = restTemplate.postForObject(url, payload(number, watchable.getGenres()), Integer[].class);
+        Object request = (type == GENRE_BASED) ? payload(watchable.getGenres()) : payload(watchable.getName());
+        Integer[] ids = restTemplate.postForObject(url + type.getPath(), request, Integer[].class);
         List<Integer> idsAsList = Arrays.asList(Objects.requireNonNull(ids));
         return idsAsList.stream()
                 .mapToLong(Integer::longValue)
@@ -59,8 +63,15 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .collect(Collectors.toList());
     }
 
-    private HttpEntity<Map<String, Object>> payload(Integer number, List<Genre> genres) {
-        Map<String, Object> requestBody = Map.of("number", number, "genres", genres);
+    private HttpEntity<Map<String, Object>> payload(List<Genre> genres) {
+        Map<String, Object> requestBody = Map.of("genres", genres);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new HttpEntity<>(requestBody, headers);
+    }
+
+    private HttpEntity<Map<String, Object>> payload(String title) {
+        Map<String, Object> requestBody = Map.of("title", title);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity<>(requestBody, headers);
